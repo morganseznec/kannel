@@ -179,7 +179,7 @@ static void clickatell_parse_reply(SMSCConn *conn, Msg *msg, int status,
         dict_destroy(param);
 
     } else {
-        error(0, "HTTP[%s]: Message was rejected. SMSC reponse `%s'.",
+        error(0, "HTTP[%s]: Message was rejected. SMSC response `%s'.",
               octstr_get_cstr(conn->id), octstr_get_cstr(body));
         bb_smscconn_send_failed(conn, msg,
                 SMSCCONN_FAILED_REJECTED, octstr_duplicate(body));

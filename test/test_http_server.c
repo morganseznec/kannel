@@ -295,7 +295,7 @@ static void help(void) {
     info(0, "    where <pid> is the process id and <n> is the received request number");
     info(0, "  /redirect/ - respond with HTTP 302 and the location /redirect/<pid>");
     info(0, "    where <pid> is the process id. if a cgivar loop=<something> is given");
-    info(0, "    then HTTP reponses will end up in a loop.");
+    info(0, "    then HTTP responses will end up in a loop.");
     info(0, "  /mmsc - fake a MMSC HTTP interface for M-Send.req PDUs send by a");
     info(0, "    mobile MMS-capable device, responds with a M-Send.conf PDU and");
     info(0, "    saves the M-Send.req body to a file /tmp/mms-body.<pid>.<n> in");

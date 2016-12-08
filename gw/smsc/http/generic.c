@@ -60,7 +60,7 @@
  * This 'generic' type will handle the 'send-url' directive in the
  * group the same way the 'sms-service' for smsbox does, via
  * URLTranslation. Response interpretation is based on the three
- * regex value that match against the reponse body. The HTTP reponse
+ * regex value that match against the response body. The HTTP response
  * code is not obeyed.
  *
  * Example config group:
@@ -517,7 +517,7 @@ static void generic_parse_reply(SMSCConn *conn, Msg *msg, int status,
             SMSCCONN_FAILED_TEMPORARILY, octstr_duplicate(body));
     }
     else {
-        error(0, "HTTP[%s]: Message was rejected. SMSC reponse was:",
+        error(0, "HTTP[%s]: Message was rejected. SMSC response was:",
               octstr_get_cstr(conn->id));
         octstr_dump(body, 0);
         bb_smscconn_send_failed(conn, msg,
