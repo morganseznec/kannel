@@ -836,8 +836,10 @@ static long httpsmsc_queued(SMSCConn *conn)
 {
     ConnData *conndata = conn->data;
 
-    return (conndata ? (conn->status != SMSCCONN_DEAD ? 
+    conn->load = (conndata ? (conn->status != SMSCCONN_DEAD ?
             gwlist_len(conndata->msg_to_send) : 0) : 0);
+
+    return conn->load;
 }
 
 
