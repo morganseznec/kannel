@@ -1,3 +1,7 @@
+2017-01-04  Stipe Tolj  <stolj at kannel.org>
+    * gw/msg.h: add msg admin 'cmd_feature' to allow passing feature on/off 
+      commands within the inter-box communication. NLC.
+      
 2016-12-13  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/smsc_http.c: fixing asymetric load distribution for this SMSC 
       type if there is a large set of non-relevant SMSCs groups and a set of

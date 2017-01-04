@@ -116,7 +116,8 @@ enum {
     cmd_suspend = 1,
     cmd_resume = 2,
     cmd_identify = 3,
-    cmd_restart = 4
+    cmd_restart = 4,
+    cmd_feature = 5,
 };
 
 /* ack message status */
