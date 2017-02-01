@@ -7,7 +7,7 @@
      * status and message flow. It is the first step to provide an
      * external Kannel Control Center interface via HTTP.
      *
-     * Stipe Tolj <stolj@wapme.de>
+     * Stipe Tolj <stolj at kannel dot org>
      *
      * Rewrite/Makeover to update the interface and add dlr support
      * Alejandro Guerrieri <aguerrieri at kannel dot org>
@@ -133,8 +133,8 @@
         <?php echo split_load($status[$inst]['sms']['outbound']) ?>
         <?php echo split_load($status[$inst]['dlr']['outbound']) ?>
         <td>
-            <?php echo admin_link('suspend')." | ".admin_link('isolate')." | ".admin_link('resume')."<br />"; ?>
-            <?php echo admin_link('flush-dlr')." | ".admin_link('shutdown')." | ".admin_link('restart') ?>
+            <?php echo admin_link('suspend')." | ".admin_link('isolate')." | ".admin_link('resume')." | ".admin_link('flush-dlr')."<br />"; ?>
+            <?php echo admin_link('shutdown')." | ".admin_link('restart')." | ".admin_link('graceful-restart') ?>
         </td>
     </tr>
 <?php
@@ -371,11 +371,21 @@
             '<?php echo $config["base_url"] ?>/stop-smsc?smsc=<?php echo $smsc['admin-id'] ?>',
             '<?php echo $smsc['admin-id'] ?>',
             '<?php echo $config["admin_passwd"] ?>'); return false;">stop</a>
-        <br />
+        |
         <a class="href" href="#" onClick="admin_smsc_url('start-smsc',
             '<?php echo $config["base_url"] ?>/start-smsc?smsc=<?php echo $smsc['admin-id'] ?>',
-	    '<?php echo $smsc['admin-id'] ?>',
+            '<?php echo $smsc['admin-id'] ?>',
             '<?php echo $config["admin_passwd"] ?>'); return false;">start</a>
+        <br />
+        <a class="href" href="#" onClick="admin_smsc_url('remove-smsc',
+            '<?php echo $config["base_url"] ?>/remove-smsc?smsc=<?php echo $smsc['admin-id'] ?>',
+            '<?php echo $smsc['admin-id'] ?>',
+            '<?php echo $config["admin_passwd"] ?>'); return false;">remove</a>
+        |
+        <a class="href" href="#" onClick="admin_smsc_url('add-smsc',
+            '<?php echo $config["base_url"] ?>/add-smsc?smsc=<?php echo $smsc['admin-id'] ?>',
+            '<?php echo $smsc['admin-id'] ?>',
+            '<?php echo $config["admin_passwd"] ?>'); return false;">add</a>
     </td>
 </tr>
 <?php
