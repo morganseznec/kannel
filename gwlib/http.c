@@ -1962,30 +1962,31 @@ static void client_reset(HTTPClient *p)
 /*
  * Checks whether the client connection is meant to be persistent or not.
  * Returns 1 for true, 0 for false.
+ * Reference: RFC2616, section 8.1.2.1 Negotiation
  */
-
 static int client_is_persistent(List *headers, int use_version_1_0)
 {
     Octstr *h = http_header_find_first(headers, "Connection");
 
     if (h == NULL) {
+        /* assumes persistent for HTTP/1.1, not for HTTP/1.0 */
         return !use_version_1_0;
     } else {
         List *values = octstr_split(h, octstr_imm(","));
+        int ret;
         octstr_destroy(h);
-        if (!use_version_1_0) {
-            if (gwlist_search(values, octstr_imm("keep-alive"), octstr_item_case_match) != NULL) {
-                gwlist_destroy(values, octstr_destroy_item);
-                return 1;
-            } else {
-                gwlist_destroy(values, octstr_destroy_item);
-                return 0;
-            }
+        if (gwlist_search(values, octstr_imm("keep-alive"), octstr_item_case_match) != NULL) {
+            /* Keep-Alive was requested */
+            ret = 1;
         } else if (gwlist_search(values, octstr_imm("close"), octstr_item_case_match) != NULL) {
-            gwlist_destroy(values, octstr_destroy_item);
-            return 0;
+            /* Close was requested */
+            ret = 0;
+        } else {
+            /* Nothing was requested, so based on HTTP version */
+            ret = (!use_version_1_0);
         }
         gwlist_destroy(values, octstr_destroy_item);
+        return ret;
     }
 
     return 1;
@@ -2691,12 +2692,11 @@ void http_send_reply(HTTPClient *client, int status, List *headers,
     
     octstr_format_append(response, "Content-Length: %ld\r\n", octstr_len(body));
 
-    /* 
-     * RFC2616, sec. 8.1.2.1 says that if the server chooses to close the 
-     * connection, it *should* send a coresponding header
-     */
-    if (!client->use_version_1_0 && !client->persistent_conn)
-        octstr_format_append(response, "Connection: close\r\n");
+    /* Indicate if we're keeping the connection or closing. */
+    if (client->persistent_conn)
+        octstr_format_append(response, "Connection: Keep-Alive\r\n");
+    else
+        octstr_format_append(response, "Connection: Close\r\n");
 
     for (i = 0; i < gwlist_len(headers); ++i)
     	octstr_format_append(response, "%S\r\n", gwlist_get(headers, i));
