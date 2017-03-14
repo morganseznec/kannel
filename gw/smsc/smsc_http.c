@@ -970,8 +970,6 @@ int smsc_http_create(SMSCConn *conn, CfgGroup *cfg)
         conndata->callbacks = &smsc_http_generic_callback;
     } else if (octstr_case_compare(type, octstr_imm("clickatell")) == 0) {
         conndata->callbacks = &smsc_http_clickatell_callback;
-    } else if (octstr_case_compare(type, octstr_imm("wapme")) == 0) {
-        conndata->callbacks = &smsc_http_wapme_callback;
     }
     /*
      * ADD NEW HTTP SMSC TYPES HERE
