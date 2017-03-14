@@ -1,3 +1,18 @@
+2017-03-14  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: remove 'wapme' reference for HTTP SMSC type.
+    * gw/smsc/smsc_http.c: re-considering an older issue, when having UCS2 
+      payload from the smsbox connection side. All major HTTP API will NEED
+      a unique encoding that is injected, and we will use 'alt-charset = UTF-8'
+      to allow setting a config diretive to convert ANY encoding to UTF-8
+      towards the upstream, which reflects an unique input encoding, otherwise
+      there is no way to distinguish this. This allows keeping the currentlogic 
+      if no 'alt-charset' is set. 
+    * gw/smsc/http/wapme.c: removed the 'wapme' type as it is dead for quite 
+      some time now.
+    This patchset ensures that we have a construct (via setting a config
+    directive, alt-charset) to uniquely provision MTs to the upstream SMSC.
+    [Msg-Id: <4D76BF9C.7070700@tolj.org>]
+      
 2017-02-22  Stipe Tolj  <stolj at kannel.org>
     * gwlib/http.c: fix missing keep-alive indication when we DO keep the 
       connection persistent as a server, cleaned up the corresponding 

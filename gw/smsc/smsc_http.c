@@ -128,7 +128,8 @@
 #include "urltrans.h"
 #include "meta_data.h"
 
-#define DEFAULT_CHARSET "UTF-8"
+#define DEFAULT_CHARSET         "UTF-8"
+#define DEFAULT_UCS2_CHARSET    "UCS-2"
 
 /* callback functions set by HTTP-SMSC type */
 struct smsc_http_fn_callbacks {
@@ -819,11 +820,34 @@ static int httpsmsc_send(SMSCConn *conn, Msg *msg)
 
     sms = msg_duplicate(msg);
     /* convert character encoding if required */
-    if (msg->sms.coding == DC_7BIT && conndata->alt_charset &&
-        charset_convert(sms->sms.msgdata, DEFAULT_CHARSET,
-                        octstr_get_cstr(conndata->alt_charset)) != 0) {
-        error(0, "Failed to convert msgdata from charset <%s> to <%s>, will send as is.",
-              DEFAULT_CHARSET, octstr_get_cstr(conndata->alt_charset));
+    if (conndata->alt_charset) {
+        /*
+         * Converted now to the target character set based on the
+         * one we got in the msg, which is either UTF-8 (our normal
+         * inter-box encoding), but may also be UCS-2, so beware.
+         * In addition, IF we convert to an "extra" encoding here
+         * we also revert the .coding vaue to DC_UNDEF, in order
+         * that all API specific code doesn't indicate an encoding
+         * which is no longer inside the payload here.
+         */
+        if (sms->sms.coding == DC_7BIT) {
+            if (charset_convert(sms->sms.msgdata, DEFAULT_CHARSET,
+                    octstr_get_cstr(conndata->alt_charset)) == 0) {
+                sms->sms.coding = DC_UNDEF;
+            } else {
+                error(0, "Failed to convert msgdata from charset <%s> to <%s>, will send as is.",
+                         DEFAULT_CHARSET, octstr_get_cstr(conndata->alt_charset));
+            }
+        }
+        else if (sms->sms.coding == DC_UCS2) {
+            if (charset_convert(sms->sms.msgdata, DEFAULT_UCS2_CHARSET,
+                    octstr_get_cstr(conndata->alt_charset)) == 0) {
+               sms->sms.coding = DC_UNDEF;
+            } else {
+                error(0, "Failed to convert msgdata from charset <%s> to <%s>, will send as is.",
+                        DEFAULT_UCS2_CHARSET, octstr_get_cstr(conndata->alt_charset));
+            }
+        }
     }
 
     gwlist_produce(conndata->msg_to_send, sms);
@@ -875,7 +899,6 @@ static int httpsmsc_shutdown(SMSCConn *conn, int finish_sending)
 #include "http/brunet.c"
 #include "http/xidris.c"
 #include "http/clickatell.c"
-#include "http/wapme.c"
 
 
 int smsc_http_create(SMSCConn *conn, CfgGroup *cfg)
