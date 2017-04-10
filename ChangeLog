@@ -1,3 +1,7 @@
+2017-04-10  Stipe Tolj  <stolj at kannel.org>
+    * gw/smsc/smsc_http.c: fix transcoding by using UTF-16BE as UCS-2 encoding 
+      indication.
+
 2017-03-14  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: remove 'wapme' reference for HTTP SMSC type.
     * gw/smsc/smsc_http.c: re-considering an older issue, when having UCS2 

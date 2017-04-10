@@ -129,7 +129,7 @@
 #include "meta_data.h"
 
 #define DEFAULT_CHARSET         "UTF-8"
-#define DEFAULT_UCS2_CHARSET    "UCS-2"
+#define DEFAULT_UCS2_CHARSET    "UTF-16BE"
 
 /* callback functions set by HTTP-SMSC type */
 struct smsc_http_fn_callbacks {
