@@ -396,17 +396,18 @@ static void generic_receive_sms(SMSCConn *conn, HTTPClient *client,
         debug("smsc.http.generic", 0, "HTTP[%s]: Constructing new SMS",
               octstr_get_cstr(conn->id));
 
-        /* convert character encoding if required */
+        msg->sms.msgdata = octstr_duplicate(text);
+
+        /* re-encode content if necessary */
         if (conndata->alt_charset &&
-            charset_convert(text, octstr_get_cstr(conndata->alt_charset),
-                    DEFAULT_CHARSET) != 0)
-            error(0, "Failed to convert msgdata from charset <%s> to <%s>, will leave it as it is.",
-                    octstr_get_cstr(conndata->alt_charset), DEFAULT_CHARSET);
+                sms_charset_processing(conndata->alt_charset, msg->sms.msgdata, msg->sms.coding) == -1) {
+            error(0, "HTTP[%s]: Charset or body misformed, will leave it as it is.",
+                  octstr_get_cstr(conn->id));
+        }
 
         msg->sms.service = octstr_duplicate(user);
         msg->sms.sender = octstr_duplicate(from);
         msg->sms.receiver = octstr_duplicate(to);
-        msg->sms.msgdata = octstr_duplicate(text);
         msg->sms.udhdata = octstr_duplicate(udh);
         msg->sms.smsc_id = octstr_duplicate(conn->id);
         msg->sms.time = time(NULL);

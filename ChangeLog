@@ -1,3 +1,9 @@
+2017-04-11  Stipe Tolj  <stolj at kannel.org>
+    * gw/smsc/http/generic.c: provides the missing MO part for the generic type
+      from the patchset dated 2017-03-14, allowing to send UTF-8 data, which
+      can then be forwarded as UCS-2 towards the smsbox connection. We transcode
+      ONLY if an alt-charset is set and a coding value has been provided.
+
 2017-04-10  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/smsc_http.c: fix transcoding by using UTF-16BE as UCS-2 encoding 
       indication.
