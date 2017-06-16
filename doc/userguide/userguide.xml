@@ -1597,6 +1597,7 @@ admin-password = f00bar
 		certificate and is used for the HTTPS server side only.
 	  </entry>
     </row>
+
 	 <row><entry><literal>ssl-trusted-ca-file</literal></entry>
      <entry>filename</entry>
      <entry valign="bottom">
@@ -1604,6 +1605,24 @@ admin-password = f00bar
      working as a HTTPS client. If this option is not set, certificates
      are not validated and those the identity of the server is not proven.
 	  </entry>
+    </row>
+
+     <row><entry><literal>ssl-client-cipher-list</literal></entry>
+     <entry>filename</entry>
+     <entry valign="bottom">
+     Defines the list of encryption suites and ciphers to be used for 
+     client side connections. For further details please see
+     https://www.openssl.org/docs/manmaster/man1/ciphers.html
+      </entry>
+    </row>
+
+     <row><entry><literal>ssl-server-cipher-list</literal></entry>
+     <entry>filename</entry>
+     <entry valign="bottom">
+     Defines the list of encryption suites and ciphers to be used for 
+     server side connections. For further details please see
+     https://www.openssl.org/docs/manmaster/man1/ciphers.html
+      </entry>
     </row>
 
     <row><entry><literal>dlr-storage</literal></entry>

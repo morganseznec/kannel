@@ -64,7 +64,7 @@
  * Jarkko Kovala <jarkko.kovala@iki.fi>
  *
  * SSL server implementation contributed by
- * Stipe Tolj <stolj@wapme.de> for Wapme Systems AG
+ * Stipe Tolj <stolj at kannel.org>
  */
 
 /* TODO: unlocked_close() on error */
@@ -84,6 +84,8 @@
 #ifdef HAVE_LIBSSL
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <openssl/conf.h>
+#include <openssl/engine.h>
 
 static SSL_CTX *global_ssl_context = NULL;
 static SSL_CTX *global_server_ssl_context = NULL;
@@ -1341,8 +1343,13 @@ void conn_shutdown_ssl(void)
     if (global_ssl_context)
         SSL_CTX_free(global_ssl_context);
     
+    CONF_modules_free();
+    ERR_remove_state(0);
+    ENGINE_cleanup();
+    CONF_modules_unload(1);
     ERR_free_strings();
     EVP_cleanup();
+    CRYPTO_cleanup_all_ex_data();
 }
 
 void server_shutdown_ssl(void)
@@ -1350,8 +1357,13 @@ void server_shutdown_ssl(void)
     if (global_server_ssl_context)
         SSL_CTX_free(global_server_ssl_context);
 
+    CONF_modules_free();
+    ERR_remove_state(0);
+    ENGINE_cleanup();
+    CONF_modules_unload(1);
     ERR_free_strings();
     EVP_cleanup();
+    CRYPTO_cleanup_all_ex_data();
 }
 
 void conn_use_global_client_certkey_file(Octstr *certkeyfile)
@@ -1385,6 +1397,26 @@ void conn_use_global_server_certkey_file(Octstr *certfile, Octstr *keyfile)
     }
     info(0, "Using global server SSL certificate from file `%s'", octstr_get_cstr(certfile));
     info(0, "Using global server SSL key from file `%s'", octstr_get_cstr(keyfile));
+}
+
+void conn_use_global_client_cipher_list(Octstr *cipher)
+{
+    if (SSL_CTX_set_cipher_list(global_ssl_context, octstr_get_cstr(cipher)) != 1) {
+        error(0, "SSL: %s", ERR_error_string(ERR_get_error(), NULL));
+        SSL_CTX_free(global_ssl_context);
+        panic(0, "cipher list <%s> contains no supported ciphers!",
+              octstr_get_cstr(cipher));
+    }
+}
+
+void conn_use_global_server_cipher_list(Octstr *cipher)
+{
+    if (SSL_CTX_set_cipher_list(global_server_ssl_context, octstr_get_cstr(cipher)) != 1) {
+        error(0, "SSL: %s", ERR_error_string(ERR_get_error(), NULL));
+        SSL_CTX_free(global_server_ssl_context);
+        panic(0, "cipher list <%s> contains no supported ciphers!",
+              octstr_get_cstr(cipher));
+    }
 }
 
 static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
@@ -1428,9 +1460,11 @@ void conn_use_global_trusted_ca_file(Octstr *ssl_trusted_ca_file)
 void conn_config_ssl (CfgGroup *grp)
 {
     Octstr *ssl_client_certkey_file = NULL;
-    Octstr *ssl_server_cert_file    = NULL;
-    Octstr *ssl_server_key_file     = NULL;
-    Octstr *ssl_trusted_ca_file     = NULL;
+    Octstr *ssl_server_cert_file = NULL;
+    Octstr *ssl_server_key_file = NULL;
+    Octstr *ssl_trusted_ca_file = NULL;
+    Octstr *ssl_client_cipher_list = NULL;
+    Octstr *ssl_server_cipher_list = NULL;
 
     /*
      * check if SSL is desired for HTTP servers and then
@@ -1453,10 +1487,22 @@ void conn_config_ssl (CfgGroup *grp)
     
     conn_use_global_trusted_ca_file(ssl_trusted_ca_file);
 
+    /*
+     * Check if specific ciphers are selected/de-selected.
+     */
+    if ((ssl_client_cipher_list = cfg_get(grp, octstr_imm("ssl-client-cipher-list"))) != NULL) {
+        conn_use_global_client_cipher_list(ssl_client_cipher_list);
+    }
+    if ((ssl_server_cipher_list = cfg_get(grp, octstr_imm("ssl-server-cipher-list"))) != NULL) {
+        conn_use_global_server_cipher_list(ssl_server_cipher_list);
+    }
+
     octstr_destroy(ssl_client_certkey_file);
     octstr_destroy(ssl_server_cert_file);
     octstr_destroy(ssl_server_key_file);
     octstr_destroy(ssl_trusted_ca_file);
+    octstr_destroy(ssl_client_cipher_list);
+    octstr_destroy(ssl_server_cipher_list);
 }
 
 SSL *conn_get_ssl(Connection *conn)

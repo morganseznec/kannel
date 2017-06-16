@@ -330,6 +330,15 @@ void conn_use_global_server_certkey_file(Octstr *certfile, Octstr *keyfile);
  */
 void conn_use_global_trusted_ca_file(Octstr *ssl_trusted_ca_file);
 
+/*
+ * Specifies the encryption suites and ciphers that are allowed to be used.
+ * Definition of the cipher string can be found at the openssl documentation
+ * https://www.openssl.org/docs/manmaster/man1/ciphers.html
+ */
+void conn_use_global_client_cipher_list(Octstr *cipher);
+void conn_use_global_server_cipher_list(Octstr *cipher);
+
+
 /* Configures all global variables for client and server SSL mode 
  * from the values specified within the configuration file.
  */

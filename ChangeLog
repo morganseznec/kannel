@@ -1,3 +1,14 @@
+2017-06-16  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: add documentation for config directives
+      'ssl-[client|server]-cipher-list'.
+    * gwlib/cfg.def: add above config directives to 'group = core'.
+    * gwlib/conn.[ch]: ensure openssl engine cleanup is performed more cleanly,
+      this avoids various static memory leaks reported by valgrind, and add
+      encryption suite and cipher select/de-select configuration.
+    This patchset allows configuring the SSL/TLS client/server side connection
+    by defining which suites and ciphers should be used. The corresponding
+    cipher stings are defined in the openssl documentation part.
+    
 2017-04-11  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/http/generic.c: provides the missing MO part for the generic type
       from the patchset dated 2017-03-14, allowing to send UTF-8 data, which
