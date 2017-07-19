@@ -1085,6 +1085,25 @@ static SMPP_PDU *msg_to_pdu(SMPP *smpp, Msg *msg)
 
     pdu->u.submit_sm.sm_length = octstr_len(pdu->u.submit_sm.short_message);
 
+    /* check long messages, because:
+     * The sm_length parameter specifies the length of the short_message parameter in octets.
+     * The sm_length should be set to 0 in the submit_sm, submit_multi, and deliver_sm PDUs if
+     * the message_payload parameter is being used to send user data larger than 254 octets.
+     */
+    if (pdu->u.submit_sm.sm_length > 254) {
+        if (smpp->version > 0x33) {
+            /* put msgdata into message_payload */
+            pdu->u.submit_sm.message_payload = pdu->u.submit_sm.short_message;
+            pdu->u.submit_sm.short_message = NULL;
+            pdu->u.submit_sm.sm_length = 0;
+        } else {
+            error(0, "SMPP[%s]: Unable to send long message (%ld) Octets in smpp version < 3.4",
+                  octstr_get_cstr(smpp->conn->id), pdu->u.submit_sm.sm_length);
+            smpp_pdu_destroy(pdu);
+            return NULL;
+        }
+    }
+
     /*
      * check for validity and deferred settings
      * were message value has higher priority then smsc config group value
