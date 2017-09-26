@@ -1,3 +1,7 @@
+2017-09-26  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/dbpool_redis.c: fix segfaulting when under high load and stopping
+      redis-server connections.
+
 2017-07-19 Alexander Malysh <amalysh at kannel.org>
     * gw/smsc/smsc_smpp.c: Fixed sending of long messages.
       This fixes #769.

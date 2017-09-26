@@ -269,6 +269,9 @@ static int redis_select(void *conn, const Octstr *sql, List *binds, List **res)
         reply = redisCommand(conn, octstr_get_cstr(sql));
     }
 
+    if (reply == NULL)
+        return -1;
+
     /* evaluate reply */
     switch (reply->type) {
         case REDIS_REPLY_ERROR:
@@ -392,6 +395,9 @@ static int redis_update(void *conn, const Octstr *sql, List *binds)
         /* execute statement */
         reply = redisCommand(conn, octstr_get_cstr(sql));
     }
+
+    if (reply == NULL)
+        return -1;
 
     /* evaluate reply */
     switch (reply->type) {
