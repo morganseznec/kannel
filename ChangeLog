@@ -1,3 +1,12 @@
+2017-10-13  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: document 'const' directive in context
+      group 'smpp-tlv'.
+    * gw/smsc/smpp_pdu.[ch]: implement smpp_tlv_add_constant() to add any
+      configured constant values if the corresponding TLV values have not been
+      set via the meta-data part.
+    * gw/smsc/smsc_smpp.c: call smpp_tlv_add_constant() to set contant values.
+    * gwlib/cfg.def: add 'const' to 'group = smpp-tlv'.
+    
 2017-09-26  Stipe Tolj  <stolj at kannel.org>
     * gwlib/dbpool_redis.c: fix segfaulting when under high load and stopping
       redis-server connections.

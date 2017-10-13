@@ -1151,6 +1151,9 @@ static SMPP_PDU *msg_to_pdu(SMPP *smpp, Msg *msg)
     dict_destroy(pdu->u.submit_sm.tlv);
     pdu->u.submit_sm.tlv = meta_data_get_values(msg->sms.meta_data, "smpp");
 
+    /* add any configured constant TLVs */
+    smpp_tlv_add_constant(smpp->conn->id, &(pdu->u.submit_sm.tlv));
+
 	return pdu;
 }
 
@@ -2762,11 +2765,6 @@ int smsc_smpp_create(SMSCConn *conn, CfgGroup *grp)
         panic(0, "SMPP: Invalid wait-ack-expire directive in configuration.");
 
     if (cfg_get_integer(&esm_class, grp, octstr_imm("esm-class")) == -1) {
-        esm_class = ESM_CLASS_SUBMIT_STORE_AND_FORWARD_MODE;
-    } else if ( esm_class != ESM_CLASS_SUBMIT_DEFAULT_SMSC_MODE && 
-              esm_class != ESM_CLASS_SUBMIT_STORE_AND_FORWARD_MODE ) {
-        error(0, "SMPP: Invalid esm_class mode '%ld' in configuration. Switching to \"Store and Forward\".", 
-                      esm_class);
         esm_class = ESM_CLASS_SUBMIT_STORE_AND_FORWARD_MODE;
     }
 

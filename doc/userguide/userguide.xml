@@ -10639,6 +10639,12 @@ smsc-id = a;b;c
 		To define list of smsc-id, just use ; as split char.
      </entry></row>
 
+   <row><entry><literal>const</literal></entry>
+     <entry><literal>string</literal></entry>
+     <entry valign="bottom">
+        An optional constant value which is used if no value is set for this TLV via meta-data.
+     </entry></row>
+
 	</tbody>
   </tgroup>
 </informaltable>

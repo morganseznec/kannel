@@ -76,6 +76,7 @@ struct smpp_tlv {
     Octstr *name;
     long tag;
     long length;
+    Octstr *constant;
     enum { SMPP_TLV_OCTETS = 0, SMPP_TLV_NULTERMINATED = 1, SMPP_TLV_INTEGER = 2 } type;
 };
 
@@ -83,6 +84,7 @@ struct smpp_tlv {
 static Dict *tlvs_by_tag;
 /* Dict(smsc_id, Dict(tag_name, tlv)) */
 static Dict *tlvs_by_name;
+static Dict *tlvs_by_const;
 static List *tlvs;
 static int initialized;
 
@@ -92,8 +94,40 @@ static void smpp_tlv_destroy(struct smpp_tlv *tlv)
     if (tlv == NULL)
         return;
     octstr_destroy(tlv->name);
+    octstr_destroy(tlv->constant);
     gw_free(tlv);
 }
+
+
+void smpp_tlv_add_constant(Octstr *smsc_id, Dict **tlvs)
+{
+    Dict *constant;
+    List *keys;
+    Octstr *key;
+    struct smpp_tlv *tlv;
+
+    constant = dict_get(tlvs_by_const, smsc_id);
+    if (constant == NULL)
+        return;
+
+    keys = dict_keys(constant);
+    while ((key = gwlist_extract_first(keys)) != NULL) {
+        /* only add if not available already */
+        tlv = dict_get(constant, key);
+        if (tlv && tlv->constant) {
+            if (*tlvs) {
+                if (dict_get(*tlvs, key) == NULL)
+                    dict_put(*tlvs, key, octstr_duplicate(tlv->constant));
+            } else {
+                *tlvs = dict_create(1024, octstr_destroy_item);
+                dict_put(*tlvs, key, octstr_duplicate(tlv->constant));
+            }
+        }
+        octstr_destroy(key);
+    }
+    gwlist_destroy(keys, NULL);
+}
+
 
 static struct smpp_tlv *smpp_tlv_get_by_name(Octstr *smsc_id, Octstr *name)
 {
@@ -159,6 +193,7 @@ int smpp_pdu_init(Cfg *cfg)
     tlvs = gwlist_create();
     tlvs_by_tag = dict_create(1024, (void(*)(void*))dict_destroy);
     tlvs_by_name = dict_create(1024, (void(*)(void*))dict_destroy);
+    tlvs_by_const = dict_create(1024, (void(*)(void*))dict_destroy);
     while (l != NULL && (grp = gwlist_extract_first(l)) != NULL) {
         struct smpp_tlv *tlv;
         Octstr *tmp, *smsc_id;
@@ -170,6 +205,7 @@ int smpp_pdu_init(Cfg *cfg)
             smpp_tlv_destroy(tlv);
             goto failed;
         }
+        tlv->constant = cfg_get(grp, octstr_imm("const"));
         if (cfg_get_integer(&tlv->tag, grp, octstr_imm("tag")) == -1) {
             error(0, "SMPP: Unable to get tag for smpp-tlv.");
             smpp_tlv_destroy(tlv);
@@ -215,6 +251,7 @@ int smpp_pdu_init(Cfg *cfg)
 
             debug("sms.smpp", 0, "adding smpp-tlv for smsc-id=%s", octstr_get_cstr(smsc_id));
 
+            /* name */
             tmp_dict = dict_get(tlvs_by_name, smsc_id);
             if (tmp_dict == NULL) {
                 tmp_dict = dict_create(1024, NULL);
@@ -227,6 +264,7 @@ int smpp_pdu_init(Cfg *cfg)
                 goto failed;
             }
 
+            /* tag */
             tmp_dict = dict_get(tlvs_by_tag, smsc_id);
             if (tmp_dict == NULL) {
                 tmp_dict = dict_create(1024, NULL);
@@ -240,6 +278,21 @@ int smpp_pdu_init(Cfg *cfg)
                 octstr_destroy(smsc_id);
                 goto failed;
             }
+
+            /* const */
+            if (tlv->constant != NULL) {
+                tmp_dict = dict_get(tlvs_by_const, smsc_id);
+                if (tmp_dict == NULL) {
+                    tmp_dict = dict_create(1024, NULL);
+                    dict_put(tlvs_by_const, smsc_id, tmp_dict);
+                }
+                if (!dict_put_once(tmp_dict, tlv->name, tlv)) {
+                    error(0, "SMPP: Double TLV name %s found.", octstr_get_cstr(tlv->name));
+                    octstr_destroy(smsc_id);
+                    goto failed;
+                }
+            }
+
             octstr_destroy(tmp);
             octstr_destroy(smsc_id);
         }

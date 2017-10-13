@@ -247,4 +247,7 @@ Octstr *smpp_pdu_read_data(Connection *conn, long len);
  */
 const char *smpp_error_to_string(enum SMPP_ERROR_MESSAGES error);
 
+/* add constant TLVs to TLV dictionary */
+void smpp_tlv_add_constant(Octstr *smsc_id, Dict **tlvs);
+
 #endif

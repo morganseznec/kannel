@@ -689,6 +689,7 @@ MULTI_GROUP(smpp-tlv,
     OCTSTR(length)
     OCTSTR(type)
     OCTSTR(smsc-id)
+    OCTSTR(const)
 )
 
 
