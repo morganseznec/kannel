@@ -1,3 +1,7 @@
+2017-11-21  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: document hard-coded 'data_coding' value
+      for SMPP's meta-data group.
+      
 2017-10-13  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: document 'const' directive in context
       group 'smpp-tlv'.

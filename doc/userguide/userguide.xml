@@ -10652,6 +10652,7 @@ smsc-id = a;b;c
 Beside defined in the configuration <literal>smpp-tlv</literal> group, SMPP also supports some hardcoded <literal>meta-data</literal>
 values:
 <itemizedlist>
+<listitem><para>data_coding</para></listitem>
 <listitem><para>source_addr_ton</para></listitem>
 <listitem><para>source_addr_npi</para></listitem>
 <listitem><para>dest_addr_ton</para></listitem>
