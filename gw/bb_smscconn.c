@@ -536,9 +536,9 @@ long bb_smscconn_receive(SMSCConn *conn, Msg *sms)
         }
 
         if (black_list_sender_regex &&
-                gw_regex_match_pre(black_list_sender_regex, sms->sms.sender) == 0) {
+                gw_regex_match_pre(black_list_sender_regex, sms->sms.sender) != 0) {
             gw_rwlock_unlock(&white_black_list_lock);
-            info(0, "Number <%s> is not in black-list, message discarded",
+            info(0, "Number <%s> is in black-list, message discarded",
                  octstr_get_cstr(sms->sms.sender));
             bb_alog_sms(conn, sms, "REJECTED Receive SMS - black-regex-listed SMS");
             msg_destroy(sms);
@@ -576,9 +576,9 @@ long bb_smscconn_receive(SMSCConn *conn, Msg *sms)
         }
 
         if (black_list_receiver_regex &&
-                gw_regex_match_pre(black_list_receiver_regex, sms->sms.receiver) == 0) {
+                gw_regex_match_pre(black_list_receiver_regex, sms->sms.receiver) != 0) {
             gw_rwlock_unlock(&white_black_list_lock);
-            info(0, "Number <%s> is not in black-list-receiver, message discarded",
+            info(0, "Number <%s> is in black-list-receiver, message discarded",
                  octstr_get_cstr(sms->sms.receiver));
             bb_alog_sms(conn, sms, "REJECTED Receive SMS - black-regex-listed SMS");
             msg_destroy(sms);
