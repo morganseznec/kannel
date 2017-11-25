@@ -10,8 +10,8 @@
 # RE error: illegal byte sequence
 export LC_ALL=C
 
-old="2001-2015 Kannel Group"
-new="2001-2016 Kannel Group"
+old="2001-2016 Kannel Group"
+new="2001-2017 Kannel Group"
 
 prog=`basename $0`
 files=`find . -type f ! -name "${prog}" ! -path "*/.svn/*" ! -path "./addons/*" | xargs fgrep -lr "${old}"`
