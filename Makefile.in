@@ -96,27 +96,19 @@ XML_DCL=@XML_DCL@
 # Version number is common.
 suffix = $(SUFFIX)
 
-SUBDIRS =
-
+SUBDIRS = utils
 #
 # You probably don't need to touch anything below this, if you're just
 # compiling and installing the software.
 #
 
-STARTSTOPDAEMONSRC=@STARTSTOPDAEMONSRC@
-
 binsrcs = \
 	wmlscript/wmlsc.c \
-	wmlscript/wmlsdasm.c \
-	utils/seewbmp.c \
-	utils/mtbatch.c \
-	utils/decode_emimsg.c
+	wmlscript/wmlsdasm.c
 sbinsrcs = \
 	gw/bearerbox.c \
 	gw/smsbox.c \
-	gw/wapbox.c \
-	utils/run_kannel_box.c \
-	$(STARTSTOPDAEMONSRC)
+	gw/wapbox.c
 progsrcs = $(binsrcs) $(sbinsrcs)
 progobjs = $(progsrcs:.c=.o)
 progs = $(progsrcs:.c=@EXE_EXT@)
@@ -162,10 +154,10 @@ pres = $(srcs:.c=.i)
 
 libs = libgw.a libwmlscript.a libwap.a libgwlib.a
 
-srcdirs = gw gw/smsc gwlib test utils wmlscript checks wap radius
+srcdirs = gw gw/smsc gwlib test wmlscript checks wap radius
 
-man1pages = utils/seewbmp.1 utils/mtbatch.1 wmlscript/wmlsc.1 wmlscript/wmlsdasm.1
-man8pages = gw/kannel.8 utils/run_kannel_box.8
+man1pages = wmlscript/wmlsc.1 wmlscript/wmlsdasm.1
+man8pages = gw/kannel.8
 
 docsrcs = $(wildcard grep -l '<!DOCTYPE ' doc/*/*.xml)
 docs = $(docsrcs:.xml=.html) $(docsrcs:.xml=.rtf) $(docsrcs:.xml=.ps) $(docsrcs:.xml=.pdf)
@@ -235,7 +227,7 @@ figs = $(figsrcs:.fig=.png)  $(figsrcs:.fig=.ps)
 .c.i:
 	$(CC) $(CFLAGS) -o $@ -E $<
 
-all: progs $(testprogs) $(checkprogs) $(DOCSTARGET) gw-config $(SUBDIRS)
+all: $(libs) $(SUBDIRS) progs $(testprogs) $(checkprogs) $(DOCSTARGET) gw-config
 progs: $(progs)
 tests: $(testprogs)
 docs: figs ps $(docs)

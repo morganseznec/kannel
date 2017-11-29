@@ -643,7 +643,8 @@ SQLITE
 SDB_CONFIG
 MYSQL_CONFIG
 OPENSSL
-STARTSTOPDAEMONSRC
+BUILD_STARTSTOPDAEMON_FALSE
+BUILD_STARTSTOPDAEMON_TRUE
 SUFFIX
 DOCDRAFTS
 DOCSTARGET
@@ -1500,7 +1501,7 @@ Optional Features:
   --enable-mutex-stats    produce information about lock contention
   --disable-cookies       disable cookie support for WSP [enabled]
   --disable-keepalive     disable HTTP/1.1 keep-alive support [enabled]
-  --enable-start-stop-daemon  compile the start-stop-daemon program [disabled]
+  --enable-start-stop-daemon  compile/install the start-stop-daemon program [disabled]
   --disable-wap           disables WAP gateway parts in bearerbox
   --disable-sms           disables SMS gateway parts in bearerbox
   --enable-ssl            enable SSL client and server support [enabled]
@@ -17377,15 +17378,37 @@ fi
 
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to compile start-stop-daemon" >&5
+$as_echo_n "checking whether to compile start-stop-daemon... " >&6; }
 # Check whether --enable-start-stop-daemon was given.
 if test "${enable_start_stop_daemon+set}" = set; then :
   enableval=$enable_start_stop_daemon;
-  if test "$enableval" = yes; then
-     STARTSTOPDAEMONSRC="utils/start-stop-daemon.c"
-  fi
+  case "${enableval}" in
+    yes)
+      buildbin=true
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabled" >&5
+$as_echo "enabled" >&6; }
+      ;;
+    no)
+      buildbin=false
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled" >&5
+$as_echo "disabled" >&6; }
+      ;;
+    *) as_fn_error $? "bad value ${enableval} for --enable-start-stop-daemon" "$LINENO" 5 ;;
+  esac
 
+else
+   buildbin=false ; { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabled" >&5
+$as_echo "disabled" >&6; }
 fi
 
+ if test x$buildbin = xtrue; then
+  BUILD_STARTSTOPDAEMON_TRUE=
+  BUILD_STARTSTOPDAEMON_FALSE='#'
+else
+  BUILD_STARTSTOPDAEMON_TRUE='#'
+  BUILD_STARTSTOPDAEMON_FALSE=
+fi
 
 
 
@@ -19662,7 +19685,7 @@ fi
 '
   echo "${nl}${T_MD}Generating output files ...${T_ME}"
 
-ac_config_files="$ac_config_files gwlib/gw_uuid_types.h Makefile soap/Makefile"
+ac_config_files="$ac_config_files gwlib/gw_uuid_types.h Makefile soap/Makefile utils/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -19799,6 +19822,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${BUILD_STARTSTOPDAEMON_TRUE}" && test -z "${BUILD_STARTSTOPDAEMON_FALSE}"; then
+  as_fn_error $? "conditional \"BUILD_STARTSTOPDAEMON\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -20682,6 +20709,7 @@ do
     "gwlib/gw_uuid_types.h") CONFIG_FILES="$CONFIG_FILES gwlib/gw_uuid_types.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "soap/Makefile") CONFIG_FILES="$CONFIG_FILES soap/Makefile" ;;
+    "utils/Makefile") CONFIG_FILES="$CONFIG_FILES utils/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

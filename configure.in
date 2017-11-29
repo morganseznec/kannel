@@ -802,13 +802,22 @@ AC_ARG_ENABLE(keepalive,
 
 dnl --enable-start-stop-daemon option.
 
+AC_MSG_CHECKING([whether to compile start-stop-daemon])
 AC_ARG_ENABLE(start-stop-daemon,
-[  --enable-start-stop-daemon  compile the start-stop-daemon program @<:@disabled@:>@], [
-  if test "$enableval" = yes; then
-     STARTSTOPDAEMONSRC="utils/start-stop-daemon.c"
-  fi
-])
-AC_SUBST(STARTSTOPDAEMONSRC)
+[  --enable-start-stop-daemon  compile/install the start-stop-daemon program @<:@disabled@:>@], [
+  case "${enableval}" in
+    yes)
+      buildbin=true
+      AC_MSG_RESULT(enabled)
+      ;;
+    no)
+      buildbin=false
+      AC_MSG_RESULT(disabled)
+      ;;
+    *) AC_MSG_ERROR(bad value ${enableval} for --enable-start-stop-daemon) ;;
+  esac
+],[ buildbin=false ; AC_MSG_RESULT(disabled)])
+AM_CONDITIONAL(BUILD_STARTSTOPDAEMON, test x$buildbin = xtrue)
 
 
 dnl Implement --disable-wap and --disable-sms options.
@@ -1503,6 +1512,7 @@ AC_OUTPUT([
 	gwlib/gw_uuid_types.h
 	Makefile
 	soap/Makefile
+	utils/Makefile
 ])
 
 
