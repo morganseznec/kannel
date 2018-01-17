@@ -1,6 +1,9 @@
+2018-01-17 Alexander Malysh <amalysh at kannel.org>
+    * gw/bb_smscconn.c: fixed copy & paste error. This fixes #773.
+
 2017-11-29 Alexander Malysh <amalysh at kannel.org>
-   * configure: moved utils compile to extra Makefile.am and fixed conditional
-     make for start-stop-daemon.
+    * configure: moved utils compile to extra Makefile.am and fixed conditional
+      make for start-stop-daemon.
 
 2017-11-21 Alexander Malysh <amalysh at kannel.org>
     * gw/bb_smscconn.c: fixed copy & paste error. This fixes #772.
