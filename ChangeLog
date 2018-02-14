@@ -1,4 +1,7 @@
 2018-02-14 Alexander Malysh <amalysh at kannel.org>
+    * test/test_http.c: fixed compilation error.
+
+2018-02-14 Alexander Malysh <amalysh at kannel.org>
     * configure.in: fixed deprecation warnings.
 
 2018-01-17 Alexander Malysh <amalysh at kannel.org>

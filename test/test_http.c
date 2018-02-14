@@ -451,11 +451,13 @@ int main(int argc, char **argv)
         follow_redirect = 0;
         break;
 
+#ifdef HAVE_LIBSSL
     case 'C':
         ca_file = octstr_create(optarg);
         conn_use_global_trusted_ca_file(ca_file);
         octstr_destroy(ca_file);
         break;
+#endif
 
     case '?':
 	default:
