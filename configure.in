@@ -906,14 +906,24 @@ if test "x$ssllib" != "x" && test "x$sslinc" != "x"; then
   LIBS="$LIBS -L$ssllib"
 
   AC_PATH_PROG(OPENSSL, openssl, no)
-  if test "$OPENSSL" = "yes"; then
+  if test "$OPENSSL" != "no"; then
     AC_MSG_CHECKING([openssl version])
     openssl_version=`$OPENSSL version | awk '{print $2}'`
     AC_MSG_RESULT([$openssl_version])
   fi
-  AC_CHECK_LIB(crypto, CRYPTO_lock,
+  SSL_MAJ_V="${openssl_version%.*.*}"
+  SSL_MIN_V="${openssl_version#*.}"
+  SSL_MIN_V="${SSL_MIN_V%.*}"
+  if test $SSL_MAJ_V -le 1 -a $SSL_MIN_V -lt 1 ; then
+    CRYPTO_CHECK=CRYPTO_lock
+    SSL_CHECK=SSL_library_init
+  else
+    CRYPTO_CHECK=HMAC_Update
+    SSL_CHECK=OPENSSL_init_ssl
+  fi
+  AC_CHECK_LIB(crypto, $CRYPTO_CHECK,
   [ LIBS="$LIBS -lcrypto"
-    AC_CHECK_LIB(ssl, SSL_library_init,
+    AC_CHECK_LIB(ssl, $SSL_CHECK,
     [ AC_CHECK_LIB(ssl, SSL_connect)
       AC_CHECK_HEADERS(openssl/x509.h openssl/rsa.h openssl/crypto.h \
                        openssl/pem.h openssl/ssl.h openssl/err.h \
@@ -936,7 +946,7 @@ if test "x$ssllib" != "x" && test "x$sslinc" != "x"; then
         AC_DEFINE(HAVE_LIBSSL)
         LIBS="$LIBS -lssl"
         AC_MSG_CHECKING([whether to compile with SSL support])
-	AC_MSG_RESULT(yes)
+        AC_MSG_RESULT(yes)
       ], [
         AC_ARG_ENABLE(ssl-thread-test,
         [  --disable-ssl-thread-test  disable the multithread test for the OpenSSL library

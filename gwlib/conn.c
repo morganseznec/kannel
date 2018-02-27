@@ -1275,6 +1275,8 @@ static RSA *tmp_rsa_callback(SSL *ssl, int export, int key_len)
 }
 */
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+
 static Mutex **ssl_static_locks = NULL;
 
 /* the call-back function for the openssl crypto thread locking */
@@ -1317,8 +1319,14 @@ void openssl_shutdown_locks(void)
     ssl_static_locks = NULL;
 }
 
+#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
+
 void conn_init_ssl(void)
 {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+    openssl_init_locks();
+#endif
+
     SSL_library_init();
     SSL_load_error_strings();
     global_ssl_context = SSL_CTX_new(SSLv23_client_method());
@@ -1340,6 +1348,10 @@ void server_ssl_init(void)
 
 void conn_shutdown_ssl(void)
 {
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+    openssl_shutdown_locks();
+#endif
+
     if (global_ssl_context)
         SSL_CTX_free(global_ssl_context);
     
@@ -1424,9 +1436,17 @@ static int verify_callback(int preverify_ok, X509_STORE_CTX *ctx)
     char    subject[256];
     char    issuer [256];
     char   *status;
+    X509   *curr_cert;
 
-    X509_NAME_oneline(X509_get_subject_name(ctx->current_cert), subject, sizeof(subject));
-    X509_NAME_oneline(X509_get_issuer_name(ctx->current_cert), issuer, sizeof (issuer));
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+    curr_cert = ctx->current_cert;
+    X509_NAME_oneline(X509_get_subject_name(curr_cert), subject, sizeof(subject));
+    X509_NAME_oneline(X509_get_issuer_name(curr_cert), issuer, sizeof (issuer));
+#else
+    curr_cert = X509_STORE_CTX_get_current_cert(ctx);
+    X509_NAME_oneline(X509_get_subject_name(curr_cert), subject, sizeof(subject));
+    X509_NAME_oneline(X509_get_issuer_name(curr_cert), issuer, sizeof (issuer));
+#endif
 
     status = preverify_ok ? "Accepting" : "Rejecting";
     
