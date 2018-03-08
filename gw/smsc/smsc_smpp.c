@@ -81,7 +81,8 @@
 #include "meta_data.h"
 #include "load.h"
 
-#define SMPP_DEFAULT_CHARSET "UTF-8"
+#define SMPP_DEFAULT_CHARSET        "UTF-8"
+#define SMPP_DEFAULT_UCS2_CHARSET   "UTF-16BE"
 
 enum smpp_pdu_dump_format {
     SMPP_PDU_DUMP_MULTILINE = 1,
@@ -434,7 +435,7 @@ error:
 }
 
 
-static void handle_mt_dcs(Octstr *short_message, int data_coding)
+static void handle_mt_dcs(Octstr *short_message, char *internal, int data_coding)
 {
     /*
      * Keep in mind that we do transcode the encoding here,
@@ -448,45 +449,48 @@ static void handle_mt_dcs(Octstr *short_message, int data_coding)
      */
     switch (data_coding) {
         case 0x01: /* ASCII or IA5 */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "ASCII") != 0) {
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to ASCII, will leave as is");
+            if (charset_convert(short_message, internal, "ASCII") != 0) {
+                error(0, "Failed to convert msgdata from %s to ASCII, will leave as is", internal);
             }
             break;
         case 0x03: /* ISO-8859-1 (aka latin1) */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "LATIN1") != 0) {
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to LATIN1, will leave as is");
+            if (charset_convert(short_message, internal, "LATIN1") != 0) {
+                error(0, "Failed to convert msgdata from %s to LATIN1, will leave as is", internal);
             }
             break;
         case 0x02: /* 8 bit binary - do nothing */
         case 0x04: /* 8 bit binary - do nothing */
             break;
         case 0x05: /* Japanese, JIS(X 0208-1990) */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "JIS_X0208-1990") != 0)
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to Japanese (JIS-X0208-1990), "
-                         "will leave as is");
+            if (charset_convert(short_message, internal, "JIS_X0208-1990") != 0)
+                error(0, "Failed to convert msgdata from %s to Japanese (JIS-X0208-1990), "
+                         "will leave as is", internal);
             break;
         case 0x06: /* Cyrllic - iso-8859-5 */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "ISO-8859-5") != 0)
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to Cyrllic (ISO-8859-5), "
-                         "will leave as is");
+            if (charset_convert(short_message, internal, "ISO-8859-5") != 0)
+                error(0, "Failed to convert msgdata from %s to Cyrllic (ISO-8859-5), "
+                         "will leave as is", internal);
             break;
         case 0x07: /* Hebrew iso-8859-8 */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "ISO-8859-8") != 0)
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to Hebrew (ISO-8859-8), "
-                         "will leave as is");
+            if (charset_convert(short_message, internal, "ISO-8859-8") != 0)
+                error(0, "Failed to convert msgdata from %s to Hebrew (ISO-8859-8), "
+                         "will leave as is", internal);
             break;
-        case 0x08: /* unicode UCS-2, don't convert here anything. */
+        case 0x08: /* unicode UCS-2 */
+            if (charset_convert(short_message, internal, SMPP_DEFAULT_UCS2_CHARSET) != 0)
+                error(0, "Failed to convert msgdata from %s to Unicode (UTF-16BE), "
+                         "will leave as is", internal);
             break;
         case 0x0D: /* Japanese, Extended Kanji JIS(X 0212-1990) */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "JIS_X0212-1990") != 0)
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to Japanese (JIS-X0212-1990), "
-                         "will leave as is");
+            if (charset_convert(short_message, internal, "JIS_X0212-1990") != 0)
+                error(0, "Failed to convert msgdata from %s to Japanese (JIS-X0212-1990), "
+                         "will leave as is", internal);
             break;
         case 0x0E: /* Korean, KS C 5601 - now called KS X 1001, convert to Unicode */
-            if (charset_convert(short_message, SMPP_DEFAULT_CHARSET, "KSC_5601") != 0 &&
-                    charset_convert(short_message, SMPP_DEFAULT_CHARSET, "KSC5636") != 0)
-                error(0, "Failed to convert msgdata from " SMPP_DEFAULT_CHARSET " to Korean (KSC_5601/KSC5636), "
-                         "will leave as is");
+            if (charset_convert(short_message, internal, "KSC_5601") != 0 &&
+                    charset_convert(short_message, internal, "KSC5636") != 0)
+                error(0, "Failed to convert msgdata from %s to Korean (KSC_5601/KSC5636), "
+                         "will leave as is", internal);
             break;
         case 0x00: /* GSM 03.38 */
         default:
@@ -1064,7 +1068,7 @@ static SMPP_PDU *msg_to_pdu(SMPP *smpp, Msg *msg)
             /*
              * convert to a forced data_coding value, or GSM 03.38 if not
              */
-            handle_mt_dcs(pdu->u.submit_sm.short_message, data_coding);
+            handle_mt_dcs(pdu->u.submit_sm.short_message, SMPP_DEFAULT_CHARSET, data_coding);
             if (data_coding != -1)
                 pdu->u.submit_sm.data_coding = data_coding;
         } else if (pdu->u.submit_sm.data_coding == 0 && smpp->alt_charset) {
@@ -1076,6 +1080,14 @@ static SMPP_PDU *msg_to_pdu(SMPP *smpp, Msg *msg)
                 error(0, "Failed to convert msgdata from charset <%s> to <%s>, will send as is.",
                           SMPP_DEFAULT_CHARSET, octstr_get_cstr(smpp->alt_charset));
         }
+    }
+    else if (msg->sms.coding == DC_UCS2 && data_coding > 0x04 && data_coding != 0x08) {
+        /*
+         * convert to a forced data_coding value, which is given in UCS-2,
+         * avoid the transcoding if we want UCS2 (data_coding 0x08) anyway.
+         */
+        handle_mt_dcs(pdu->u.submit_sm.short_message, SMPP_DEFAULT_UCS2_CHARSET, data_coding);
+        pdu->u.submit_sm.data_coding = data_coding;
     }
 
     /* prepend udh if present */

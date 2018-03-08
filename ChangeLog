@@ -1,3 +1,9 @@
+2018-03-08  Stipe Tolj  <stolj at kannel.org>
+    * gw/smsc/smsc_smpp.c: fix enforced meta-data data_coding handling when
+      getting coding = DC_7BIT (hence UTF-8), but want to enforce to Unicode.
+      In this case we would have sticked to UTF-8 in the payload, but declared
+      it as data_coding = 0x00 (indicating GSM 03.38), which is wrong of course.
+      
 2018-02-28 Alexander Malysh <amalysh at kannel.org>
     * added support for openssl version > 1.1
 
