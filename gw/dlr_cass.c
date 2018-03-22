@@ -397,8 +397,8 @@ found:
     db_conf = gw_malloc(sizeof(DBConf));
     gw_assert(db_conf != NULL);
 
-    db_conf->mysql = gw_malloc(sizeof(CassConf));
-    gw_assert(db_conf->mysql != NULL);
+    db_conf->cass = gw_malloc(sizeof(CassConf));
+    gw_assert(db_conf->cass != NULL);
 
     db_conf->cass->host = host;
     db_conf->cass->port = port;

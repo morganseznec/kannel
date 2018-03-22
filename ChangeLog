@@ -1,3 +1,6 @@
+2018-03-22  Stipe Tolj  <stolj at kannel.org>
+    * gw/dlr_cass.c: fix obvious copy-and-paste typo. NLC.
+
 2018-03-08  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/smsc_smpp.c: fix enforced meta-data data_coding handling when
       getting coding = DC_7BIT (hence UTF-8), but want to enforce to Unicode.
