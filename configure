@@ -772,7 +772,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -899,7 +898,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -1152,15 +1150,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1298,7 +1287,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1451,7 +1440,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -13975,7 +13963,7 @@ else
     We can't simply define LARGE_OFF_T to be 9223372036854775807,
     since some C++ compilers masquerading as C compilers
     incorrectly reject 9223372036854775807.  */
-#define LARGE_OFF_T ((((off_t) 1 << 31) << 31) - 1 + (((off_t) 1 << 31) << 31))
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1];
@@ -14021,7 +14009,7 @@ else
     We can't simply define LARGE_OFF_T to be 9223372036854775807,
     since some C++ compilers masquerading as C compilers
     incorrectly reject 9223372036854775807.  */
-#define LARGE_OFF_T ((((off_t) 1 << 31) << 31) - 1 + (((off_t) 1 << 31) << 31))
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1];
@@ -14045,7 +14033,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     We can't simply define LARGE_OFF_T to be 9223372036854775807,
     since some C++ compilers masquerading as C compilers
     incorrectly reject 9223372036854775807.  */
-#define LARGE_OFF_T ((((off_t) 1 << 31) << 31) - 1 + (((off_t) 1 << 31) << 31))
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1];
@@ -14090,7 +14078,7 @@ else
     We can't simply define LARGE_OFF_T to be 9223372036854775807,
     since some C++ compilers masquerading as C compilers
     incorrectly reject 9223372036854775807.  */
-#define LARGE_OFF_T ((((off_t) 1 << 31) << 31) - 1 + (((off_t) 1 << 31) << 31))
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1];
@@ -14114,7 +14102,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     We can't simply define LARGE_OFF_T to be 9223372036854775807,
     since some C++ compilers masquerading as C compilers
     incorrectly reject 9223372036854775807.  */
-#define LARGE_OFF_T ((((off_t) 1 << 31) << 31) - 1 + (((off_t) 1 << 31) << 31))
+#define LARGE_OFF_T (((off_t) 1 << 62) - 1 + ((off_t) 1 << 62))
   int off_t_is_large[(LARGE_OFF_T % 2147483629 == 721
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1];
@@ -17586,19 +17574,42 @@ fi
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking openssl version" >&5
 $as_echo_n "checking openssl version... " >&6; }
     openssl_version=`$OPENSSL version | awk '{print $2}'`
+    openssl_ver=`echo $openssl_version | sed 's/[a-zA-Z]//g'`
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $openssl_version" >&5
 $as_echo "$openssl_version" >&6; }
   fi
-  SSL_MAJ_V="${openssl_version%.*.*}"
-  SSL_MIN_V="${openssl_version#*.}"
-  SSL_MIN_V="${SSL_MIN_V%.*}"
-  if test $SSL_MAJ_V -le 1 -a $SSL_MIN_V -lt 1 ; then
+
+    ac_inst_ver_maj=`echo $openssl_ver | sed -e 's/^\(.*\)\..*\..*$/\1/'`
+  ac_inst_ver_mid=`echo $openssl_ver | sed -e 's/^.*\.\(.*\)\..*$/\1/'`
+  ac_inst_ver_min=`echo $openssl_ver | sed -e 's/^.*\..*\.\(.*\)$/\1/'`
+
+    ac_req_ver_maj=`echo "1.1.0" | sed -e 's/^\(.*\)\..*\..*$/\1/'`
+  ac_req_ver_mid=`echo "1.1.0" | sed -e 's/^.*\.\(.*\)\..*$/\1/'`
+  ac_req_ver_min=`echo "1.1.0" | sed -e 's/^.*\..*\.\(.*\)$/\1/'`
+
+    if test "$ac_inst_ver_maj" -lt "$ac_req_ver_maj" || \
+    ( test "$ac_inst_ver_maj" -eq "$ac_req_ver_maj" && \
+      test "$ac_inst_ver_mid" -lt "$ac_req_ver_mid" ) || \
+    ( test "$ac_inst_ver_mid" -eq "$ac_req_ver_mid" && \
+      test "$ac_inst_ver_min" -lt "$ac_req_ver_min" )
+  then
+    ac_ver_fail=yes
+  else
+    ac_ver_fail=no
+  fi
+
+    if test $ac_ver_fail = no; then
+     CRYPTO_CHECK=HMAC_Update
+    SSL_CHECK=OPENSSL_init_ssl
+
+   fi
+  if test $ac_ver_fail = yes; then
+
     CRYPTO_CHECK=CRYPTO_lock
     SSL_CHECK=SSL_library_init
-  else
-    CRYPTO_CHECK=HMAC_Update
-    SSL_CHECK=OPENSSL_init_ssl
-  fi
+
+   fi
+
   as_ac_Lib=`$as_echo "ac_cv_lib_crypto_$CRYPTO_CHECK" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CRYPTO_CHECK in -lcrypto" >&5
 $as_echo_n "checking for $CRYPTO_CHECK in -lcrypto... " >&6; }

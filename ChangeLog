@@ -1,3 +1,9 @@
+2018-03-23  Stipe Tolj  <stolj at kannel.org>
+    * configure.in: fixing r5201, which breaks openssl function testing for any
+      older openssl versions, i.e. 0.9.8f, since the version checking doesn't
+      handle 0.x correct. We rather use the AC_CHECK_VERSION() construct for 
+      this and remove all characters from the version string first.
+
 2018-03-22  Stipe Tolj  <stolj at kannel.org>
     * gw/dlr_cass.c: fix obvious copy-and-paste typo. NLC.
 

@@ -909,18 +909,16 @@ if test "x$ssllib" != "x" && test "x$sslinc" != "x"; then
   if test "$OPENSSL" != "no"; then
     AC_MSG_CHECKING([openssl version])
     openssl_version=`$OPENSSL version | awk '{print $2}'`
+    openssl_ver=`echo $openssl_version | sed 's/[[a-zA-Z]]//g'`
     AC_MSG_RESULT([$openssl_version])
   fi
-  SSL_MAJ_V="${openssl_version%.*.*}"
-  SSL_MIN_V="${openssl_version#*.}"
-  SSL_MIN_V="${SSL_MIN_V%.*}"
-  if test $SSL_MAJ_V -le 1 -a $SSL_MIN_V -lt 1 ; then
+  AC_CHECK_VERSION($openssl_ver, "1.1.0", 
+  [ CRYPTO_CHECK=HMAC_Update
+    SSL_CHECK=OPENSSL_init_ssl
+  ],[
     CRYPTO_CHECK=CRYPTO_lock
     SSL_CHECK=SSL_library_init
-  else
-    CRYPTO_CHECK=HMAC_Update
-    SSL_CHECK=OPENSSL_init_ssl
-  fi
+  ])
   AC_CHECK_LIB(crypto, $CRYPTO_CHECK,
   [ LIBS="$LIBS -lcrypto"
     AC_CHECK_LIB(ssl, $SSL_CHECK,
