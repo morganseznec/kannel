@@ -1,3 +1,8 @@
+2018-06-11  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/gw_uuid.c: ensure we handle SunOS (Solaris) for SIOCGIFHWADDR.
+    * gwlib/log.c: define syslog facility names for SunOS (Solaris).
+    Minor patchset to support Solaris 11 (SunOS 5.11) builds again.
+    
 2018-03-23  Stipe Tolj  <stolj at kannel.org>
     * configure.in: fixing r5201, which breaks openssl function testing for any
       older openssl versions, i.e. 0.9.8f, since the version checking doesn't

@@ -267,7 +267,8 @@ static int get_node_id(unsigned char *node_id)
 	for (i = 0; i < n; i+= ifreq_size(*ifr) ) {
 		ifrp = (struct ifreq *)((char *) ifc.ifc_buf+i);
 		strncpy(ifr.ifr_name, ifrp->ifr_name, IFNAMSIZ);
-#ifdef SIOCGIFHWADDR
+		/* Solaris 11 defines SIOCGIFHWADDR, but has no ifr_hwaddr member */
+#if defined(SIOCGIFHWADDR) && !defined(__sun__)
 		if (ioctl(sd, SIOCGIFHWADDR, &ifr) < 0)
 			continue;
 		a = (unsigned char *) &ifr.ifr_hwaddr.sa_data;
