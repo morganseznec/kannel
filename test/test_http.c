@@ -87,6 +87,7 @@ static Octstr *method_name = NULL;
 static int file = 0;
 static List *split = NULL;
 static int follow_redirect = 1;
+static int escape_codes = 0;
 
 
 static Octstr *post_content_create(void)
@@ -99,6 +100,62 @@ static Octstr *post_content_create(void)
     octstr_dump(content, 0);
 
     return content;
+}
+
+
+static void url_pattern(Octstr *url)
+{
+    Octstr *temp;
+    const char *pattern;
+    size_t n;
+
+    temp = octstr_duplicate(url);
+    octstr_truncate(url, 0);
+
+    pattern = octstr_get_cstr(temp);
+
+    while (*pattern != '\0') {
+        n = strcspn(pattern, "%");
+        octstr_append_data(url, pattern, n);
+        pattern += n;
+        gw_assert(*pattern == '%' || *pattern == '\0');
+        if (*pattern == '\0')
+            break;
+
+        pattern++;
+
+        switch (*pattern) {
+
+        case 'r':
+            octstr_format_append(url, "%ld", gw_rand());
+            break;
+
+        case 'I':
+        {
+            uuid_t uid;
+            char id[UUID_STR_LEN + 1];
+            uuid_generate(uid);
+            uuid_unparse(uid, id);
+            octstr_append_cstr(url, id);
+        }
+            break;
+
+            /* XXX add more here if needed */
+
+        case '%':
+            octstr_format_append(url, "%%");
+            break;
+
+        default:
+            warning(0, "Unknown escape code (%%%c) within URL, skipping!", *pattern);
+                octstr_format_append(url, "%%%c", *pattern);
+            break;
+        } /* switch(...) */
+
+        pattern++;
+    } /* while ... */
+
+    octstr_destroy(temp);
 }
 
 static void start_request(HTTPCaller *caller, List *reqh, long i)
@@ -128,7 +185,11 @@ static void start_request(HTTPCaller *caller, List *reqh, long i)
         content = post_content_create();
         method = HTTP_METHOD_POST;
     }
-                                
+
+    /* apply any escape codes */
+    if (escape_codes)
+        url_pattern(url);
+
     /*
      * if this is a POST request then pass the required content as body to
      * the HTTP server, otherwise skip the body, the arguments will be
@@ -286,6 +347,8 @@ static void help(void)
     info(0, "    use `domain.name' as a proxy");
     info(0, "-P portnumber");
     info(0, "    connect to proxy at port `portnumber'");
+    info(0, "-E regex");
+    info(0, "    proxy exceptions as regex value");
     info(0, "-S");
     info(0, "    use HTTPS scheme to access SSL-enabled proxy server");
     info(0, "-e domain1:domain2:...");
@@ -309,6 +372,9 @@ static void help(void)
     info(0, "    use this file as the SSL certificate authority");
     info(0, "-f");
     info(0, "    don't follow redirects");
+    info(0, "-V");
+    info(0, "    evaluate for URL escape code patterns (%r - random number,");
+    info(0, "    %I - UUID string)");
 }
 
 int main(int argc, char **argv) 
@@ -341,7 +407,7 @@ int main(int argc, char **argv)
     file = 0;
     fp = NULL;
     
-    while ((opt = getopt(argc, argv, "hv:qr:p:P:Se:t:i:a:u:sc:H:B:m:fC:")) != EOF) {
+    while ((opt = getopt(argc, argv, "hv:qr:p:P:Se:t:i:a:u:sc:H:B:m:fVC:")) != EOF) {
 	switch (opt) {
 	case 'v':
 	    log_set_output_level(atoi(optarg));
@@ -449,6 +515,10 @@ int main(int argc, char **argv)
 
     case 'f':
         follow_redirect = 0;
+        break;
+
+    case 'V':
+        escape_codes = 1;
         break;
 
 #ifdef HAVE_LIBSSL

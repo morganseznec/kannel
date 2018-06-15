@@ -1,3 +1,8 @@
+2018-06-15  Stipe Tolj  <stolj at kannel.org>
+    * test/test_http.c: add URL escape codes for %r for random number and $I for
+      UUID string representation. Escape pattern scaning is activate via option
+      switch -V.
+      
 2018-06-11  Stipe Tolj  <stolj at kannel.org>
     * gwlib/gw_uuid.c: ensure we handle SunOS (Solaris) for SIOCGIFHWADDR.
     * gwlib/log.c: define syslog facility names for SunOS (Solaris).
