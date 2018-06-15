@@ -1,4 +1,8 @@
 2018-06-15  Stipe Tolj  <stolj at kannel.org>
+    * gw/bb_smscconn.c: fix copy and paste typo, causing memory corruption and
+      hence PANIC/segfault while using HTTP admin command /reload-lists.
+      
+2018-06-15  Stipe Tolj  <stolj at kannel.org>
     * test/test_http.c: add URL escape codes for %r for random number and $I for
       UUID string representation. Escape pattern scaning is activate via option
       switch -V.

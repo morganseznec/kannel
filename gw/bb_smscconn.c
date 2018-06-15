@@ -1215,7 +1215,7 @@ int smsc2_reload_lists(void)
         } else {
             gw_rwlock_wrlock(&white_black_list_lock);
             numhash_destroy(black_list_receiver);
-            black_list_sender = tmp;
+            black_list_receiver = tmp;
             gw_rwlock_unlock(&white_black_list_lock);
         }
     }
