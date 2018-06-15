@@ -25,6 +25,7 @@ done
 sleep 5
 
 kill -INT $bbpid
+sleep 15
 
 if grep 'WARNING:|ERROR:|PANIC:' check_smpp*.log >/dev/null
 then
