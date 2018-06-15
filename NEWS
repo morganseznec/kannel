@@ -1,61 +1,82 @@
-NEWS about Kannel: Open Source WAP and SMS Gateway version 1.4.4
+NEWS about Kannel: Open Source WAP and SMS Gateway version 1.4.5
 
 This is a STABLE version. It should be usable for production systems.
 Please do report problems to the Kannel bug tracking system available at 
-http://bugs.kannel.org/ or send a mail to <devel@kannel.org> (the development 
-mailing list).
+https://redmine.kannel.org/issues or send a mail to <devel@kannel.org> 
+(the development mailing list, see https://www.kannel.org/lists.shtml).
 
 
-Changes since version 1.5.0 devel: 
+Changes since version 1.4.4 stable: 
 
-[*** Beware that the version move from 1.5.0 devel to 1.4.4 stable contains 
+[*** Beware that the version move from 1.4.4 stable to 1.4.5 stable contains 
 numerous change sets, with major bug fixes and improvements. Following is a 
 summary of the main issues. For a complete and detailed set of changes please 
 refer to the specific ChangeLog in the doc/ directory of the distribution. ***]
 
 Compatibility breakers:
 
-  * SMPP config directives can have ONLY ONE session, either config directive
-    'port' or 'receive-port' can be set to identify if this is a bind as
-    transmitter or receiver. Configurations with both config directives will
-    PANIC at startup time.
-
 New features:
 
-  * Added DLR support for redis.
-  
-  * Added DLR support for spool directories.
-  
-  * Added DLR support for SQLite3.
+  * Added graceful-restarting of bearerbox via the SIGHUP signal, which can be
+    used to softly restart bearerbox on config changes allowing existing SMSC
+    connections to keep on running.
     
-  * Added SMSC support for GSMA OneAPI/Ericsson ParlayX via gSOAP.
-   
-  * Added SMSC SMPP support for optional TLVs of response PDUs via meta-data.
+  * Added redis support as message store and DLR storage.
   
-  * Added 'dead-start' feature for SMSC groups.
+  * Added Apache Cassandra 2.1, 2.2 and 3.0 support as DLR storage.
+    
+  * Added OpenSSL 1.1.x support.
   
-  * Added SMSC HTTP generic support for meta-data.
+  * Added support for chained certificate files.
   
-  * Added smsbox support to listen to specific interfaces.
+  * Added support to define which SSL/TLS chipher suites to use.
+
+  * Added UCS-2 (Unicode) support for FAKE SMSC MOs.
+
+  * Allow override of specific SMPP values via meta-data forwarding, i.e. for
+    TON/NPI, DCS.
+    
+  * Splitting white/black-list into per direction (sender/receiver) allowing
+    a more fine grained control.
+    
+  * Added 'instances' directive for 'group = smsc' contexts to duplicate the
+    configuration group into any number of instances, so there is no need to
+    duplicate the configuration in the config files, reducing the potential
+    for errors and redundancy.
+    
+  * Added per line PDU dump function for SMPP.
+  
+  * Added support for constant SMPP TLVs.
 
 Bugfixes:
 
-  * Fixed smsbox HTTP call starvation while retrying.
+  * Fixed various SMPP module issues.
   
-  * Fixed various minor memory leaks for smsbox reported by valgrind.
+  * Better handling of MySQL DBPool temporary error codes.
   
-  * Converted various PANIC conditions to WARNING/ERROR conditions to keep
-    the operations running.
-    
-  * Fixed various issues with DLR handling.
+  * Various fixes in the routing abstraction layer.
   
-  * Fixed various segmentation fault possibilities.
+  * Fixed segfault in logging module for permission errors.
   
-  * Fixed various internal character transcoding issues.
+  * Fixed smsbox's XML MT and XML POST processing.
   
-  * Fixed issues for smsbox shutdown.
+  * Fixed HTTP SMSC queue counter.
+  
+  * Fixed waiting time when in bearerbox shutdown phase.
+  
+  * Fixed missing character set processing in HTTP SMSC (type kannel).
 
-  * Fixed bearerbox MO routing logic.
+  * Fixed MO concatenation handling for re-routing cases.  
+
+  * Fixed various memory leaks.
+  
+  * Fixing asymmetric load distribution for this HTTP SMSC type.
+   
+  * Fixing HTTP Keep-Alive indication as HTTP server.
+  
+  * Fixed HTTP UCS-2 payload forwarding.
+  
+  * Fixed HTTP admin command /reload-lists.
 
 
 Changes since version 1.4.3: 
