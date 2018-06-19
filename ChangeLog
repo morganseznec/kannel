@@ -2,12 +2,12 @@
     * Making stable release 1.4.5.
 
 2018-06-19  Stipe Tolj  <stolj at kannel.org>
-    * README: update documentatio build package dependancies.
+    * README: update documentation build package dependencies.
 
 2018-06-19  Stipe Tolj  <stolj at kannel.org>
     * bootstrap.sh: re-order GNU auto-tools calls, NLC.
     * Makefile.in: provide phony 'am--refresh' to cope with bootstrapped source
-      packages on different enviornments.
+      packages on different environments.
 
 2018-06-19  Stipe Tolj  <stolj at kannel.org>
     * doc/*/[alligata|arch|userguide|wtls].xml: update DOCTYPE URL reference to
