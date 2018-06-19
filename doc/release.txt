@@ -5,7 +5,7 @@ problem, fix it, and re-start from beginning:
 
 	* Prepare the software for release.
 	
-		* Make sure everything is committed to CVS.
+		* Make sure everything is committed to SVN trunk.
 		
 		* Make sure everything is working.
 
@@ -20,45 +20,37 @@ problem, fix it, and re-start from beginning:
 	* Add an entry to ChangeLog that says you're making release
 	  such and such.
 
-	* Update file VERSION to have the version number you want.
+    * Branch SVN trunk to branches/stable_X_Y_Z for packaging.
+    
+	* Update in branches/stable_X_Y_Z file VERSION to have the version 
+	  number you want.
 
-	* Commit the changes to ChangeLog and VERSION.
-
-	* Mark the version to be released with a tag and branch. If the 
-      version number would be X.Y, then the tag would be "version_X_Y_Z".
-      If it's a stable release, tag would be "stable_X_Y_Z"
+	* Bootstrap a checkout of branches/stable_X_Y_Z on dedicated distro.
+	  Currently we're using Debian 8 (amd64).
 	  
-	  	* "cvs tag -b version_X_Y_Z" the first time.
-		
-		* "cvs tag -F version_X_Y_Z" when iterating after fixing
-		  problems in a release candidate.
-
-	* Make VERSION say "cvs" as version number so that people using
-	  the CVS version won't report some specific number as their
-	  version.
+	* Add file compile, depcomp, ltmain.sh and missing.
 	
+	* Commit VERSION, and all modified/added files after bootstrapping.
+
+	* Tag the release from branches/stable_X_Y_Z to tags/version_X_Y_Z.
+	
+	* Use tag/version_X_Y_Z is used for distribution tarball packaging.
+
 	* Make distribution files.
 	
 		* Use "makedist" script, with the version number as
 		  argument. Run it in an empty directory, not directly
-		  from the CVS work directory.  CVSROOT is set as when
-		  setting up CVS for download.
+		  from the SVN checkout directory.
 	
-	* Run release candidate on demo.kannel.org.
-
-		* Check configuration.
-		
-		* Possibly add new services.
-
 	* Put new files on www.kannel.org, and otherwise update the
 	  site to reflect the new release.
 
 		* makedist output goes in ~kannel/public_html/download/$V,
 	 	  where $V is the new version number.
 
-		* Use the www.kannel.org CVS module to change the html
-		  files, and use ~kannel/bin/publish-www.kannel.org-from-cvs
-		  after committing.
+        * Use the www.kannel.org SVN repository to change the html 
+          files, and checkout in the corresponding htdocs directory
+          after committing.
 
 		* Announce new version on index.shtml, and describe it
 		  on news.html.  Include an extract from the NEWS file.
