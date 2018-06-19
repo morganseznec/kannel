@@ -378,5 +378,8 @@ gw-config: utils/foobar-config.sh Makefile
 
 $(SUBDIRS):
 	$(MAKE) -C $@ $(MAKECMDGOALS)
+	
+am--refresh:
+	@:
 
-.PHONY: $(SUBDIRS)
+.PHONY: $(SUBDIRS) am--refresh
