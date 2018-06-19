@@ -481,10 +481,10 @@ found=""
 for loc in /usr /usr/local /sw /opt/local; do
   if test "x$found" = "x" ; then 
     for file in ${loc}/lib/sgml/stylesheet/dsssl/docbook/nwalsh/html/docbook.dsl \
-	${loc}/lib/sgml/stylesheets/nwalsh-modular/html/docbook.dsl \
-	${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/html/docbook.dsl \
-	${loc}/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl \
-	${loc}/share/sgml/docbook/stylesheet/dsssl/modular/html/docbook.dsl \
+        ${loc}/lib/sgml/stylesheets/nwalsh-modular/html/docbook.dsl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/html/docbook.dsl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets/html/docbook.dsl \
+        ${loc}/share/sgml/docbook/stylesheet/dsssl/modular/html/docbook.dsl \
         ${loc}/share/sgml/docbook/dsssl/modular/html/docbook.dsl \
         ${loc}/share/sgml/dsssl/docbook-dsssl-nwalsh/html/docbook.dsl \
         ${loc}/share/dsssl/docbook-dsssl/html/docbook.dsl ; do
@@ -499,10 +499,10 @@ found=""
 for loc in /usr /usr/local /sw /opt/local; do
   if test "x$found" = "x" ; then 
     for file in ${loc}/lib/sgml/stylesheet/dsssl/docbook/nwalsh/print/docbook.dsl \
-	${loc}/lib/sgml/stylesheets/nwalsh-modular/print/docbook.dsl \
-	${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/print/docbook.dsl \
-	${loc}/share/sgml/docbook/dsssl-stylesheets/print/docbook.dsl \
-	${loc}/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl \
+        ${loc}/lib/sgml/stylesheets/nwalsh-modular/print/docbook.dsl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/print/docbook.dsl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets/print/docbook.dsl \
+        ${loc}/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl \
         ${loc}/share/sgml/docbook/dsssl/modular/print/docbook.dsl \
         ${loc}/share/sgml/dsssl/docbook-dsssl-nwalsh/print/docbook.dsl \
         ${loc}/share/dsssl/docbook-dsssl/print/docbook.dsl ; do
@@ -517,11 +517,12 @@ found=""
 for loc in /usr /usr/local /sw /opt/local; do
   if test "x$found" = "x" ; then 
     for file in ${loc}/lib/sgml/stylesheet/dsssl/docbook/nwalsh/dtds/decls/xml.dcl \
-    ${loc}/lib/sgml/stylesheets/nwalsh-modular/dtds/decls/xml.dcl \
-    ${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/dtds/decls/xml.dcl \
-    ${loc}/share/sgml/docbook/dsssl-stylesheets/dtds/decls/xml.dcl \
-    ${loc}/share/sgml/docbook/stylesheet/dsssl/modular/dtds/decls/xml.dcl \
+        ${loc}/lib/sgml/stylesheets/nwalsh-modular/dtds/decls/xml.dcl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets-1.*/dtds/decls/xml.dcl \
+        ${loc}/share/sgml/docbook/dsssl-stylesheets/dtds/decls/xml.dcl \
+        ${loc}/share/sgml/docbook/stylesheet/dsssl/modular/dtds/decls/xml.dcl \
         ${loc}/share/sgml/docbook/dsssl/modular/dtds/decls/xml.dcl \
+        ${loc}/share/sgml/declaration/xml.dcl \
         ${loc}/share/sgml/dsssl/docbook-dsssl-nwalsh/dtds/decls/xml.dcl \
         ${loc}/share/dsssl/docbook-dsssl/dtds/decls/xml.dcl ; do
       if test "x$found" = "x" ; then 

@@ -1,2 +1,7 @@
-2018-06-15  Stipe Tolj  <stolj at kannel.org>
+2018-06-19  Stipe Tolj  <stolj at kannel.org>
     * Making stable release 1.4.5.
+
+2018-06-19  Stipe Tolj  <stolj at kannel.org>
+    * doc/*/[alligata|arch|userguide|wtls].xml: update DOCTYPE URL reference to
+      new official URL location to fix 'make docs' processing.
+    * configure.in: adding Debian 8 location for xml.dcl.
