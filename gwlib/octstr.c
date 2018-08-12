@@ -1447,7 +1447,7 @@ void octstr_shrink_blanks(Octstr *text)
             j = i = i + 1;
             while (isspace(octstr_get_char(text, j)))
                 j ++;
-            if (j - i > 1)
+            if (j - i > 0)
                 octstr_delete(text, i, j - i);
         }
     }
