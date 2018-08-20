@@ -1520,6 +1520,7 @@ AC_CONFIG_SECTION([Generating output files])
 AC_OUTPUT([
 	gwlib/gw_uuid_types.h
 	Makefile
+	wmlscript/Makefile
 	soap/Makefile
 	utils/Makefile
 ])

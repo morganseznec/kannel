@@ -1,4 +1,7 @@
 2018-08-20 Alexander Malysh <amalysh @ kannnel.org>
+   * switched wmlscript to automake.
+
+2018-08-20 Alexander Malysh <amalysh @ kannnel.org>
    * wmlscript/wsgram.[chy], wmlscript/wsint.h, wmlscript/wslexer.c: Applied patch that
      fixes build issues with bison. This fixes #699 .
      Thanks to Rici Lake for this patch.
