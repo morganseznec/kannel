@@ -4516,7 +4516,7 @@ smsc-password = foobar
      </entry></row>
 
    <row><entry><literal>window</literal></entry>
-   <entry><literal>boolean</literal></entry>
+   <entry><literal>integer</literal></entry>
    <entry valign="bottom">
       Number of concurrent sending threads. If not set,
       one thread is used.
