@@ -1,3 +1,7 @@
+2018-08-28  Stipe Tolj  <stolj at kannel.org>
+   * doc/userguide/userguide.xml: fixed 'window' value type for GSMA OneAPI.
+     Thanks to Franck Lamasuta for this patch.
+
 2018-08-20 Alexander Malysh <amalysh @ kannnel.org>
    * switched wmlscript to automake.
 
