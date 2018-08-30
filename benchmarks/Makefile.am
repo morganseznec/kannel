@@ -1,19 +1,18 @@
 benchformats = \
-    benchmarks/report.pdf \
-    benchmarks/report.ps \
-    benchmarks/report.html
-benchscripts = benchmarks/run-benchmarks $(wildcard benchmarks/*.sh)
+    report.pdf \
+    report.ps \
+    report.html
+benchscripts = run-benchmarks \
+				bench_http.sh \
+				bench_sms.sh
 benchoutputs = \
-    $(benchformats) \
-    $(wildcard benchmarks/*.ps) \
-    $(wildcard benchmarks/*.png) \
-    $(wildcard benchmarks/*.xml)
+    $(benchformats)
 
 all:
 
 bench: all $(benchformats) $(SUBDIRS)
-benchmarks/report.xml:
-	benchmarks/run-benchmarks benchmarks/*.sh
+report.xml:
+	run-benchmarks benchmarks/*.sh
 
 clean: $(SUBDIRS)
 	rm -f $(benchoutputs)

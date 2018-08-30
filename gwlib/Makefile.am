@@ -24,7 +24,6 @@ libgwlib_la_SOURCES = \
 	gw-prioqueue.c \
 	gw-rwlock.c \
 	gw-timer.c \
-	gw_lru.c \
 	gw_uuid.c \
 	gwlib.c \
 	gwmem-check.c \
@@ -65,7 +64,6 @@ include_HEADERS = \
 	gw-prioqueue.h \
 	gw-rwlock.h \
 	gw-timer.h \
-	gw_lru.h \
 	gw_uuid.h \
 	gw_uuid_types.h \
 	gwassert.h \

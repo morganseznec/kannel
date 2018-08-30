@@ -27,7 +27,6 @@ noinst_PROGRAMS = \
 	test_http \
 	test_http_server \
 	test_list \
-	test_load \
 	test_mem \
 	test_mime \
 	test_mime_multipart \
