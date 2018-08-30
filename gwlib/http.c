@@ -82,7 +82,7 @@
 #include <sys/socket.h>
 
 #include "gwlib.h"
-#include "gwlib/regex.h"
+#include "gwlib/gw-regex.h"
 
 /* comment this out if you don't want HTTP responses to be dumped */
 #define DUMP_RESPONSE 1

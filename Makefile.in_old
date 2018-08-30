@@ -93,7 +93,7 @@ XML_DCL=@XML_DCL@
 # Version number is common.
 suffix = $(SUFFIX)
 
-SUBDIRS = wmlscript utils
+SUBDIRS = radius wmlscript utils
 #
 # You probably don't need to touch anything below this, if you're just
 # compiling and installing the software.
@@ -115,7 +115,7 @@ gwobjs = $(filter-out $(progobjs),$(gwsrcs:.c=.o))
 libsrcs = $(wildcard gwlib/*.c) $(LIBSRCS)
 libobjs = $(libsrcs:.c=.o) $(LIBOBJS)
 
-wapsrcs = $(wildcard wap/*.c) $(wildcard radius/*.c)
+wapsrcs = $(wildcard wap/*.c)
 wapobjs = $(wapsrcs:.c=.o)
 
 testsrcs = $(wildcard test/*.c)
@@ -145,7 +145,7 @@ pres = $(srcs:.c=.i)
 
 libs = libgw.a wmlscript/libwmlscript.a libwap.a libgwlib.a
 
-srcdirs = gw gw/smsc gwlib test checks wap radius
+srcdirs = gw gw/smsc gwlib test checks wap
 
 man8pages = gw/kannel.8
 
@@ -327,6 +327,9 @@ libgw.a: $(gwobjs)
 libgwlib.a: $(libobjs)
 	@OLD_LIBTOOL@  libgwlib.a $(libobjs)
 	$(RANLIB) libgwlib.a
+
+radius/libradius.a:
+	$(MAKE) -C radius libradius.a
 
 libwap.a: $(wapobjs)
 	@OLD_LIBTOOL@ libwap.a $(wapobjs)

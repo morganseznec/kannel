@@ -71,7 +71,7 @@
 #include <libxml/xpathInternals.h>
 
 #include "gwlib/gwlib.h"
-#include "gwlib/regex.h"
+#include "gwlib/gw-regex.h"
 #include "gwlib/gw-timer.h"
 
 #include "msg.h"
