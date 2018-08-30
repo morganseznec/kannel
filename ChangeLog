@@ -1,3 +1,7 @@
+2018-08-30  Stipe Tolj  <stolj at kannel.org>
+   * test/test_dbpool.c: fix compiler warning/error in case we compile without
+     any DB support. NLC.
+     
 2018-08-28  Stipe Tolj  <stolj at kannel.org>
    * doc/userguide/userguide.xml: fixed 'window' value type for GSMA OneAPI.
      Thanks to Franck Lamasuta for this patch.
