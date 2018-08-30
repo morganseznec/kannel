@@ -10,6 +10,17 @@ libgw_la_SOURCES = \
 	bb_store_file.c \
 	bb_store_redis.c \
 	bb_store_spool.c \
+	dlr.c \
+	dlr_cass.c \
+	dlr_mem.c \
+	dlr_mssql.c \
+	dlr_mysql.c \
+	dlr_oracle.c \
+	dlr_pgsql.c \
+	dlr_redis.c \
+	dlr_sdb.c \
+	dlr_spool.c \
+	dlr_sqlite3.c \
 	heartbeat.c \
 	html.c \
 	load.c \
@@ -59,17 +70,6 @@ bearerbox_SOURCES = \
 	bb_http.c \
 	bb_smscconn.c \
 	bb_udp.c \
-	dlr.c \
-	dlr_cass.c \
-	dlr_mem.c \
-	dlr_mssql.c \
-	dlr_mysql.c \
-	dlr_oracle.c \
-	dlr_pgsql.c \
-	dlr_redis.c \
-	dlr_sdb.c \
-	dlr_spool.c \
-	dlr_sqlite3.c \
 	smscconn.c \
 	smsc/smsc.c \
 	smsc/smsc_at.c \
@@ -98,7 +98,7 @@ smsbox_SOURCES = \
 	
 includedir = $(prefix)/include/kannel/gw
 
-include_HEADERS = \
+nobase_include_HEADERS = \
 	alt_charsets.h \
 	bb.h \
 	bb_smscconn_cb.h \
@@ -136,7 +136,7 @@ include_HEADERS = \
 	smsc/smpp_pdu.def \
 	smsc/smpp_pdu_opt.def
 
-include_HEADERS += \
+nobase_include_HEADERS += \
 	wbxml_tokens.def \
 	wml_definitions.h \
 	wap-appl.h \

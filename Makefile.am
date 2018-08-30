@@ -3,7 +3,6 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = gwlib wmlscript radius wap gw utils test doc checks benchmarks
 
 # TODO:
-# build gw-config
 # install test (conditionally)
 # test soap
 # test doc
@@ -11,18 +10,28 @@ SUBDIRS = gwlib wmlscript radius wap gw utils test doc checks benchmarks
 
 EXTRA_DIST = AUTHORS ChangeLog COPYING INSTALL LICENSE NEWS README STATUS VERSION contrib 
 
+BUILT_SOURCES = gw-config.h
+
+includedir = $(prefix)/include/kannel
+
+include_HEADERS = \
+	gw-config.h
+
+bin_SCRIPTS = gw-config
+
+gw-config: utils/foobar-config.sh
+	./utils/foobar-config.sh "-I$(includedir) @CFLAGS@" \
+		"-L$(libdir) -lgw -lwap -lgwlib $(LIBS)" \
+		"@VERSION@" > gw-config
+	chmod 0755 gw-config
+
+
 nag:
 	utils/find-long-lines
 
 pkg: all
 	(cd solaris; mk-solaris-package.sh)
 	echo Package is now in solaris directory
-
-gw-config: utils/foobar-config.sh Makefile
-	./utils/foobar-config.sh "-I$(includedir)/kannel @CFLAGS@" \
-		"-L$(libdir)/kannel -lgw -lwap -lgwlib $(LIBS)" \
-		"@VERSION@" > gw-config
-	chmod 0755 gw-config
 
 dist-hook:
 	rm -rf `find $(distdir) -name CVS -or -name SCCS or -name .svn`
