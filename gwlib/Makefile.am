@@ -6,7 +6,6 @@ libgwlib_la_SOURCES = \
 	accesslog.c \
 	cfg.c \
 	charset.c \
-	conn-ssl.c \
 	conn.c \
 	counter.c \
 	date.c \
