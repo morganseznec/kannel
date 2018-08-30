@@ -65,7 +65,7 @@
 #include <signal.h>
 
 #include "gwlib/gwlib.h"
-#include "gwlib/pcre.h"
+#include "gwlib/gw-pcre.h"
 
 #ifdef HAVE_PCRE
 

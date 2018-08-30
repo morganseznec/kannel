@@ -37,7 +37,7 @@ libgwlib_la_SOURCES = \
 	mime.c \
 	octstr.c \
 	parse.c \
-	pcre.c \
+	gw-pcre.c \
 	pki.c \
 	protected.c \
 	gw-regex.c \
@@ -79,7 +79,7 @@ include_HEADERS = \
 	mime.h \
 	octstr.h \
 	parse.h \
-	pcre.h \
+	gw-pcre.h \
 	pki.h \
 	protected.h \
 	gw-regex.h \
