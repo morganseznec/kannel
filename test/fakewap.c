@@ -676,7 +676,7 @@ int send_post(int fd, unsigned short tid, int tid_new, char* url)
         panic(0, "fakewap: input file is empty");
     if (((transaction_mode==TXN_MODE_CONNECTION_LESS) && (fstats.st_size > (int)sizeof(msgbuf))) ||
         ((transaction_mode==TXN_MODE_CONNECTION_ORIENTED) && (fstats.st_size > 256*SAR_SEGM_SIZE))) {
-        panic(0, "fakewap: input file size (%ld) is too large", fstats.st_size);
+        panic(0, "fakewap: input file size (%ld) is too large", (long) fstats.st_size);
     }
             
     int nsegs = (fstats.st_size-1) / SAR_SEGM_SIZE;

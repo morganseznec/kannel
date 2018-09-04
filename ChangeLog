@@ -1,4 +1,7 @@
 2018-09-04  Stipe Tolj  <stolj at kannel.org>
+   * test/fakewap.c: cast panic() output to fix compiler warning on 64bit.
+  
+2018-09-04  Stipe Tolj  <stolj at kannel.org>
    * doc/doxygen/kannel.conf: re-tag the config with the current svn snapshot 
      revision number.
      
