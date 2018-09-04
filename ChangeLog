@@ -1,4 +1,7 @@
 2018-09-04  Stipe Tolj  <stolj at kannel.org>
+   * test/test_http.c: fix compiler warnings. NLC.
+   
+2018-09-04  Stipe Tolj  <stolj at kannel.org>
    * test/fakewap.c: cast panic() output to fix compiler warning on 64bit.
   
 2018-09-04  Stipe Tolj  <stolj at kannel.org>
