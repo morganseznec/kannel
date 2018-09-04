@@ -741,7 +741,7 @@ int send_post(int fd, unsigned short tid, int tid_new, char* url)
         panic(0, "fakewap: input file read error, errno %d", errno);
     
     debug("fakewap", 0, "Sending WSP_POST, url %s, Content-Type %s, User-Agent %s, Content-Length %lu",
-          url, content_type, octstr_get_cstr(useragent) + 1, fstats.st_size );
+          url, content_type, octstr_get_cstr(useragent) + 1, (long unsigned) fstats.st_size );
     
     if (transaction_mode==TXN_MODE_CONNECTION_LESS) {
         ret = wap_msg_send( fd, NULL, 0, tid, tid_new,
