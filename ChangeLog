@@ -1,3 +1,7 @@
+2018-09-04  Stipe Tolj  <stolj at kannel.org>
+   * doc/doxygen/kannel.conf: re-tag the config with the current svn snapshot 
+     revision number.
+     
 2018-08-30  Stipe Tolj  <stolj at kannel.org>
    * test/test_dbpool.c: fix compiler warning/error in case we compile without
      any DB support. NLC.
