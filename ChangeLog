@@ -1,4 +1,9 @@
 2018-09-07 Alexander Malysh <amalysh @ kannnel.org>
+   * gw/smsc/smsc_http.c, gw/smsc/smsc_http_p.h, gw/smsc/http/*.c: moved kannel
+     callbacks to gw/smsc/http/kannel.c. Added gw/smsc/http/*.c to Makefile.am
+     and use new gw_dlopen_get_symbol to get callback symbols.
+
+2018-09-07 Alexander Malysh <amalysh @ kannnel.org>
    * gwlib/gw-dlopen.[ch]: added simple dlopen lookup functionality.
 
 2018-09-07  Stipe Tolj  <stolj at kannel.org>

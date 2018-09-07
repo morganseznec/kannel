@@ -79,6 +79,11 @@ bearerbox_SOURCES = \
 	smsc/smsc_emi.c \
 	smsc/smsc_emi_x25.c \
 	smsc/smsc_fake.c \
+	smsc/http/brunet.c \
+	smsc/http/clickatell.c \
+	smsc/http/generic.c \
+	smsc/http/kannel.c \
+	smsc/http/xidris.c \
 	smsc/smsc_http.c \
 	smsc/smsc_loopback.c \
 	smsc/smsc_ois.c \
@@ -87,10 +92,16 @@ bearerbox_SOURCES = \
 	smsc/smsc_smasi.c \
 	smsc/smsc_smpp.c \
 	smsc/smsc_soap.c \
-	smsc/smsc_soap_parlayx.c \
 	smsc/smsc_wrapper.c \
 	bearerbox.c \
 	bearerbox.h
+
+#if BUILD_SOAP not ready TODO
+## if defined GSOAP add it
+#bearerbox_SOURCES += smsc/smsc_soap_parlayx.c $(soap_depend)
+#bearerbox_LDADD   += $(top_builddir)/soap/libsoap_plugin.a
+## end
+#endif
 
 smsbox_LDADD = $(top_builddir)/gwlib/libgwlib.la libgw.la
 smsbox_SOURCES = \
@@ -131,6 +142,7 @@ nobase_include_HEADERS = \
 	smsc/smsc.h \
 	smsc/smsc_at.h \
 	smsc/smsc_p.h \
+	smsc/smsc_http_p.h \
 	smsc/smsc_sema.h \
 	smsc/smasi_pdu.def \
 	smsc/smpp_pdu.def \
