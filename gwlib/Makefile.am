@@ -21,6 +21,7 @@ libgwlib_la_SOURCES = \
 	dbpool_sqlite3.c \
 	dict.c \
 	fdset.c \
+	gw-dlopen.c \
 	gw-prioqueue.c \
 	gw-rwlock.c \
 	gw-timer.c \
@@ -60,6 +61,7 @@ include_HEADERS = \
 	dbpool_p.h \
 	dict.h \
 	fdset.h \
+	gw-dlopen.h \
 	gw-getopt.h \
 	gw-prioqueue.h \
 	gw-rwlock.h \

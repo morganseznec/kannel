@@ -1,3 +1,6 @@
+2018-09-07 Alexander Malysh <amalysh @ kannnel.org>
+   * gwlib/gw-dlopen.[ch]: added simple dlopen lookup functionality.
+
 2018-09-07  Stipe Tolj  <stolj at kannel.org>
    * configure.in: removing own binary suffix handling, automake provides an own
      construct for this.
