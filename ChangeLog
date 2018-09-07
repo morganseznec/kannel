@@ -1,3 +1,8 @@
+2018-09-07  Stipe Tolj  <stolj at kannel.org>
+   * configure.in: removing own binary suffix handling, automake provides an own
+     construct for this.
+     [https://www.gnu.org/software/automake/manual/automake.html#Renaming]
+     
 2018-09-04  Stipe Tolj  <stolj at kannel.org>
    * test/test_http.c: fix compiler warnings. NLC.
    
