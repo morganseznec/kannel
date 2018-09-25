@@ -1,3 +1,8 @@
+2018-09-25  Stipe Tolj  <stolj at kannel.org>
+   * gwlib/http.c: fixing PANIC condition within conn_unregister() in case the
+     connection was destroyed already.
+     [Msg-Id: <5B964593.1070105@kannel.org>]
+     
 2018-09-07 Alexander Malysh <amalysh @ kannnel.org>
    * gw/smsc/smsc_http.c, gw/smsc/smsc_http_p.h, gw/smsc/http/*.c: moved kannel
      callbacks to gw/smsc/http/kannel.c. Added gw/smsc/http/*.c to Makefile.am

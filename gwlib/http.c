@@ -1115,7 +1115,12 @@ static void handle_transaction(Connection *conn, void *data)
         }
     }
 
-    conn_unregister(trans->conn);
+    /*
+     * Connection may have been destroyed within send_request,
+     * so be more carefull here not to panic.
+     */
+    if (trans->conn)
+        conn_unregister(trans->conn);
 
     /* 
      * Take care of persistent connection handling. 
