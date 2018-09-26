@@ -288,6 +288,15 @@ int date_parse_iso (struct universaltime *ut, Octstr *os)
         return 0;
     p += n;
 
+    if (*p == ',') {
+        long fract;
+        /* fraction */
+        p++;
+        if (sscanf(p, "%ld%n", &fract, &n) < 1)
+            return 0;
+        p += n;
+    }
+
     /* check timezone */
     if (*p) {
         long hh = 0, mi = 0;
