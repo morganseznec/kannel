@@ -1,3 +1,6 @@
+2018-09-26 Alexander Malysh <amalysh @ kannnel.org>
+    * gwlib/date.[ch]: added handling of timezone
+
 2018-09-25  Stipe Tolj  <stolj at kannel.org>
    * gwlib/http.c: fixing PANIC condition within conn_unregister() in case the
      connection was destroyed already.
