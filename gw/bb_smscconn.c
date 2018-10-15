@@ -1519,7 +1519,7 @@ Octstr *smsc2_status(int status_type)
 }
 
 
-int smsc2_graceful_restart(void)
+int smsc2_graceful_restart(Cfg *cfg)
 {
     CfgGroup *grp;
     SMSCConn *conn;
@@ -1533,10 +1533,8 @@ int smsc2_graceful_restart(void)
     gw_rwlock_wrlock(&smsc_list_lock);
 
     /* load the smsc groups from the config resource */
-    if (bb_reload_smsc_groups() != 0) {
-        gw_rwlock_unlock(&smsc_list_lock);
-        return -1;
-    }
+    gwlist_destroy(smsc_groups, NULL);
+    smsc_groups = cfg_get_multi_group(cfg, octstr_imm("smsc"));
 
     /* List of SMSCConn that we keep running */
     keep = gwlist_create();

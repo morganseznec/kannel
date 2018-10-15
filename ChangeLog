@@ -1,3 +1,16 @@
+2018-10-01  Stipe Tolj  <stolj at kannel.org>
+    * gw/bb_boxc.c: use init_smsbox_routes() for initial and reload cases, use
+      smsbox_restart() to reload smsbox routing.
+    * gw/bb_http.c: interpret bb_graceful_restart() outcome in HTTP admin command
+      function httpd_graceful_restart().
+    * gw/bearerbox.c: use gw_log_force() for starting/stopping log evetns that
+      we want to see in the log, no matter waht log-level is used (forced),
+      reload config in bb_graceful_restart() and call the sub-module reload
+      functions.
+    * gw/bearebox.h: change prototype for smsc2_graceful_restart().
+    Thhis patchsets implement the reloading (aka graceful restart) capabilities
+    for the MO direction smsbox routing groups.
+
 2018-09-26 Alexander Malysh <amalysh @ kannnel.org>
     * gwlib/date.[ch]: added handling of fraction
 
