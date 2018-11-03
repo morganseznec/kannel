@@ -1,3 +1,6 @@
+2018-11-03  Stipe Tolj  <stolj at kannel.org>
+    * gw/smsbox.c: re-intend smsbox_req_handle(). NLC.
+    
 2018-10-01  Stipe Tolj  <stolj at kannel.org>
     * gw/bb_boxc.c: use init_smsbox_routes() for initial and reload cases, use
       smsbox_restart() to reload smsbox routing.

@@ -1975,7 +1975,7 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
      * loop below, because everything else is identical for all receivers.
      * If receiver is not null, to list is already present on it
      */
-    if(receiver == NULL) {
+    if (receiver == NULL) {
         receiver = octstr_split_words(to);
     }
     no_recv = gwlist_len(receiver);
@@ -2007,14 +2007,14 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
     for (i = 0; i < no_recv; i++) {
         receiv = gwlist_get(receiver, i); 
             
-	/*
-	 * Check if there are any illegal characters in the 'to' scheme
-	 */
-	if (strspn(octstr_get_cstr(receiv), sendsms_number_chars) < octstr_len(receiv)) {
-	    info(0,"Illegal characters in 'to' string ('%s') vs '%s'",
-		octstr_get_cstr(receiv), sendsms_number_chars);
-            gwlist_append_unique(denied, receiv, octstr_item_match);
-	}
+        /*
+         * Check if there are any illegal characters in the 'to' scheme
+         */
+        if (strspn(octstr_get_cstr(receiv), sendsms_number_chars) < octstr_len(receiv)) {
+            info(0,"Illegal characters in 'to' string ('%s') vs '%s'",
+            octstr_get_cstr(receiv), sendsms_number_chars);
+                gwlist_append_unique(denied, receiv, octstr_item_match);
+        }
 
         /*
          * First of all fill the two lists systematicaly by the rules,
@@ -2055,7 +2055,6 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
         } else {
             gwlist_append_unique(allowed, receiv, octstr_item_match);
         }
-        
 
         if (white_list &&
             numhash_find_number(white_list, receiv) < 1) {
@@ -2140,14 +2139,14 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
     msg->sms.service = octstr_duplicate(urltrans_name(t));
     msg->sms.sms_type = mt_push;
     msg->sms.sender = octstr_duplicate(newfrom);
-    if(octstr_len(account)) {
-	if(octstr_len(account) <= ACCOUNT_MAX_LEN && 
-	   octstr_search_chars(account, octstr_imm("[]\n\r"), 0) == -1) {
-	    msg->sms.account = account ? octstr_duplicate(account) : NULL;
-	} else {
-	    returnerror = octstr_create("Account field misformed or too long, rejected");
-	    goto field_error;
-	}
+    if (octstr_len(account)) {
+        if (octstr_len(account) <= ACCOUNT_MAX_LEN &&
+           octstr_search_chars(account, octstr_imm("[]\n\r"), 0) == -1) {
+            msg->sms.account = account ? octstr_duplicate(account) : NULL;
+        } else {
+            returnerror = octstr_create("Account field misformed or too long, rejected");
+            goto field_error;
+        }
     }
     msg->sms.msgdata = text ? octstr_duplicate(text) : octstr_create("");
     msg->sms.udhdata = udh ? octstr_duplicate(udh) : octstr_create("");
@@ -2155,94 +2154,93 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
     if (octstr_len(binfo))
         msg->sms.binfo = octstr_duplicate(binfo);
 
-    if(octstr_len(dlr_url)) {
-	if(octstr_len(dlr_url) < 8) { /* http(s):// */
-	    returnerror = octstr_create("DLR-URL field misformed, rejected");
-	    goto field_error;
-	} else {
-	    Octstr *tmp;
-	    tmp = octstr_copy(dlr_url, 0, 7);
-	    if(octstr_case_compare(tmp, octstr_imm("http://")) == 0) {
-		msg->sms.dlr_url = octstr_duplicate(dlr_url);
-	    } else {
-		O_DESTROY(tmp);
-		tmp = octstr_copy(dlr_url, 0, 8);
-		if(octstr_case_compare(tmp, octstr_imm("https://")) != 0) {
-		    returnerror = octstr_create("DLR-URL field misformed, rejected");
-		    O_DESTROY(tmp);
-		    goto field_error;
-		}
+    if (octstr_len(dlr_url)) {
+        if (octstr_len(dlr_url) < 8) { /* http(s):// */
+            returnerror = octstr_create("DLR-URL field misformed, rejected");
+            goto field_error;
+        } else {
+            Octstr *tmp;
+            tmp = octstr_copy(dlr_url, 0, 7);
+            if (octstr_case_compare(tmp, octstr_imm("http://")) == 0) {
+            	msg->sms.dlr_url = octstr_duplicate(dlr_url);
+            } else {
+            	O_DESTROY(tmp);
+            	tmp = octstr_copy(dlr_url, 0, 8);
+            	if (octstr_case_compare(tmp, octstr_imm("https://")) != 0) {
+                	returnerror = octstr_create("DLR-URL field misformed, rejected");
+                	O_DESTROY(tmp);
+                	goto field_error;
+            	}
 #ifdef HAVE_LIBSSL
-		msg->sms.dlr_url = octstr_duplicate(dlr_url);
+            	msg->sms.dlr_url = octstr_duplicate(dlr_url);
 #else /* HAVE_LIBSSL */
-		else {    
-		    warning(0, "DLR-URL with https but SSL not supported, url is <%s>",
-			    octstr_get_cstr(dlr_url));
-		}
+            	else {
+                	warning(0, "DLR-URL with https but SSL not supported, url is <%s>",
+                    	    octstr_get_cstr(dlr_url));
+            	}
 #endif /* HAVE_LIBSSL */
-	    }
-	    O_DESTROY(tmp);
-	}
+            }
+            O_DESTROY(tmp);
+        }
     } else {
-	msg->sms.dlr_url = octstr_create("");
+        msg->sms.dlr_url = octstr_create("");
     }
 
-    if ( dlr_mask < -1 || dlr_mask > 66 ) { /* 01000010 */
-	returnerror = octstr_create("DLR-Mask field misformed, rejected");
-	goto field_error;
+    if (dlr_mask < -1 || dlr_mask > 66) { /* 01000010 */
+        returnerror = octstr_create("DLR-Mask field misformed, rejected");
+        goto field_error;
     }
     msg->sms.dlr_mask = dlr_mask;
     
-    if ( mclass < -1 || mclass > 3 ) {
-	returnerror = octstr_create("MClass field misformed, rejected");
-	goto field_error;
+    if (mclass < -1 || mclass > 3) {
+        returnerror = octstr_create("MClass field misformed, rejected");
+        goto field_error;
     }
     msg->sms.mclass = mclass;
     
-    if ( pid < -1 || pid > 255 ) {
-	returnerror = octstr_create("PID field misformed, rejected");
-	goto field_error;
+    if (pid < -1 || pid > 255) {
+        returnerror = octstr_create("PID field misformed, rejected");
+        goto field_error;
     }
     msg->sms.pid = pid;
 
-    if ( rpi < -1 || rpi > 2) {
-	returnerror = octstr_create("RPI field misformed, rejected");
-	goto field_error;
+    if (rpi < -1 || rpi > 2) {
+        returnerror = octstr_create("RPI field misformed, rejected");
+        goto field_error;
     }
     msg->sms.rpi = rpi;
     
-    if ( alt_dcs < -1 || alt_dcs > 1 ) {
-	returnerror = octstr_create("Alt-DCS field misformed, rejected");
-	goto field_error;
+    if (alt_dcs < -1 || alt_dcs > 1) {
+        returnerror = octstr_create("Alt-DCS field misformed, rejected");
+        goto field_error;
     }
     msg->sms.alt_dcs = alt_dcs;
     
-    if ( mwi < -1 || mwi > 7 ) {
-	returnerror = octstr_create("MWI field misformed, rejected");
-	goto field_error;
+    if (mwi < -1 || mwi > 7) {
+        returnerror = octstr_create("MWI field misformed, rejected");
+        goto field_error;
     }
     msg->sms.mwi = mwi;
 
-    if ( coding < -1 || coding > 2 ) {
-	returnerror = octstr_create("Coding field misformed, rejected");
-	goto field_error;
+    if (coding < -1 || coding > 2) {
+        returnerror = octstr_create("Coding field misformed, rejected");
+        goto field_error;
     }
     msg->sms.coding = coding;
 
-    if ( compress < -1 || compress > 1 ) {
-	returnerror = octstr_create("Compress field misformed, rejected");
-	goto field_error;
+    if (compress < -1 || compress > 1) {
+        returnerror = octstr_create("Compress field misformed, rejected");
+        goto field_error;
     }
     msg->sms.compress = compress;
 
     /* Compatibility Mode */
-    if ( msg->sms.coding == DC_UNDEF) {
-	if(octstr_len(udh))
-	  msg->sms.coding = DC_8BIT;
-	else
-	  msg->sms.coding = DC_7BIT;
+    if (msg->sms.coding == DC_UNDEF) {
+        if (octstr_len(udh))
+          msg->sms.coding = DC_8BIT;
+        else
+          msg->sms.coding = DC_7BIT;
     }
-	
 
     if (validity < -1) {
         returnerror = octstr_create("Validity field misformed, rejected");
@@ -2267,17 +2265,17 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
        but that's advanced logics -- Kalle */
     
     if (urltrans_forced_smsc(t)) {
-	msg->sms.smsc_id = octstr_duplicate(urltrans_forced_smsc(t));
-	if (smsc)
-	    info(0, "send-sms request smsc id ignored, "
-	    	    "as smsc id forced to %s",
-		    octstr_get_cstr(urltrans_forced_smsc(t)));
+        msg->sms.smsc_id = octstr_duplicate(urltrans_forced_smsc(t));
+        if (smsc)
+            info(0, "send-sms request smsc id ignored, "
+                    "as smsc id forced to %s",
+                 octstr_get_cstr(urltrans_forced_smsc(t)));
     } else if (smsc) {
-	msg->sms.smsc_id = octstr_duplicate(smsc);
+        msg->sms.smsc_id = octstr_duplicate(smsc);
     } else if (urltrans_default_smsc(t)) {
-	msg->sms.smsc_id = octstr_duplicate(urltrans_default_smsc(t));
+        msg->sms.smsc_id = octstr_duplicate(urltrans_default_smsc(t));
     } else
-	msg->sms.smsc_id = NULL;
+        msg->sms.smsc_id = NULL;
 
     if (sms_charset_processing(charset, msg->sms.msgdata, msg->sms.coding) == -1) {
         returnerror = octstr_create("Charset or body misformed, rejected");
@@ -2303,7 +2301,7 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
 
     while ((receiv = gwlist_extract_first(allowed)) != NULL) {
 
-	O_DESTROY(msg->sms.receiver);
+        O_DESTROY(msg->sms.receiver);
         msg->sms.receiver = octstr_duplicate(receiv);
 
         msg->sms.time = time(NULL);
@@ -2324,7 +2322,7 @@ static Octstr *smsbox_req_handle(URLTranslation *t, Octstr *client_ip,
     }
 
     if (gwlist_len(failed_id) > 0)
-	goto transmit_error;
+        goto transmit_error;
     
     *status = HTTP_ACCEPTED;
     returnerror = octstr_create("Sent.");
@@ -2360,8 +2358,7 @@ cleanup:
     
 
 field_error:
-    alog("send-SMS request failed - %s",
-            octstr_get_cstr(returnerror));
+    alog("send-SMS request failed - %s", octstr_get_cstr(returnerror));
     *status = HTTP_BAD_REQUEST;
 
     goto cleanup;
