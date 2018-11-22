@@ -218,6 +218,8 @@ long date_parse_http(Octstr *date)
         goto error;
 
     octstr_destroy(monthstr);
+    /* GTM time means offset 0 */
+    t.offset_sec = 0;
     return date_convert_universal(&t);
 
 error:

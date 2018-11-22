@@ -1,3 +1,9 @@
+2018-11-22  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/date.c: fix case where, struct universaltime element offset_sec may
+      be initialized with random value on MacOS X 10.11.x (clang-800.0.42.1), 
+      but is then used  in the following up call to date_convert_universal(), so 
+      make sure we set this to zero as we're handlign GMT times anyway. NLC.
+      
 2018-11-03  Stipe Tolj  <stolj at kannel.org>
     * gw/smsbox.c: re-intend smsbox_req_handle(). NLC.
     
