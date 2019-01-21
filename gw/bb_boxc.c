@@ -1336,12 +1336,16 @@ int wapbox_start(Cfg *cfg)
     cfg_get_bool(&wapbox_port_ssl, grp, octstr_imm("wapbox-port-ssl"));
 #endif /* HAVE_LIBSSL */
 
-    box_allow_ip = cfg_get(grp, octstr_imm("box-allow-ip"));
-    if (box_allow_ip == NULL)
-    	box_allow_ip = octstr_create("");
-    box_deny_ip = cfg_get(grp, octstr_imm("box-deny-ip"));
-    if (box_deny_ip == NULL)
-    	box_deny_ip = octstr_create("");
+    if (box_allow_ip == NULL) {
+        box_allow_ip = cfg_get(grp, octstr_imm("box-allow-ip"));
+        if (box_allow_ip == NULL)
+     	    box_allow_ip = octstr_create("");
+    }
+    if (box_deny_ip == NULL) {
+        box_deny_ip = cfg_get(grp, octstr_imm("box-deny-ip"));
+        if (box_deny_ip == NULL)
+    	    box_deny_ip = octstr_create("");
+    }
     if (box_allow_ip != NULL && box_deny_ip == NULL)
 	    info(0, "Box connection allowed IPs defined without any denied...");
 

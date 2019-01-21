@@ -1,3 +1,7 @@
+2019-01-21 Alexander Malysh <
+    * gw/bb_boxc.c: fixed small mem leak wile initializing of box_allow_ip/box_deny_ip.
+      Thanks to Paul Bagyenda for report.
+
 2018-11-22  Stipe Tolj  <stolj at kannel.org>
     * gwlib/date.c: fix case where, struct universaltime element offset_sec may
       be initialized with random value on MacOS X 10.11.x (clang-800.0.42.1), 
