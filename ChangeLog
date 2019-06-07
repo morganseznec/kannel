@@ -1,4 +1,7 @@
-2019-01-21 Alexander Malysh <
+2019-06-07 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/octstr.c: fixed url encoding safe chars
+
+2019-01-21 Alexander Malysh <amalysh @ kannel.org>
     * gw/bb_boxc.c: fixed small mem leak wile initializing of box_allow_ip/box_deny_ip.
       Thanks to Paul Bagyenda for report.
 
