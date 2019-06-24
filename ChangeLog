@@ -1,3 +1,7 @@
+2019-06-24 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/http.c: this fixes race if no list is in conn pool anymore #802.
+      Thanks to Ivan Shcherbak for the fix.
+
 2019-06-07 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/octstr.c: fixed url encoding safe chars
 
