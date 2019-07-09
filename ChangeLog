@@ -1,4 +1,7 @@
 2019-07-09 Alexander Malysh <amalysh @ kannel.org>
+    * gw/smsc/smsc_cimd2.c: use smsc connection id instead of name for DLRs.
+
+2019-07-09 Alexander Malysh <amalysh @ kannel.org>
     * doc/userguide/userguide.xml, gw/smsc/http/clickatell.c, gw/smsc/smsc_http.c,
       gw/smsc/smsc_http_p.h, gwlib/cfg.def: applied patch from Franck Lamasuta.
       Main changes:
