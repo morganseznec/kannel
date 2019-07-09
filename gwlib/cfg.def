@@ -106,10 +106,10 @@ SINGLE_GROUP(core,
     OCTSTR(store-type)
     OCTSTR(store-location)
     OCTSTR(unified-prefix)
-    OCTSTR(white-list)			/* deprecated, supported until next major stable release - start */
+    OCTSTR(white-list)           /* deprecated, supported until next major stable release - start */
     OCTSTR(white-list-regex)
     OCTSTR(black-list)
-    OCTSTR(black-list-regex)	/* deprecated, supported until next major stable release - end */
+    OCTSTR(black-list-regex)     /* deprecated, supported until next major stable release - end */
     OCTSTR(white-list-sender)
     OCTSTR(white-list-sender-regex)
     OCTSTR(black-list-sender)
@@ -419,7 +419,7 @@ MULTI_GROUP(smsc,
     OCTSTR(generic-param-account)
     OCTSTR(generic-param-binfo)
     OCTSTR(generic-param-dlr-mask)
-	OCTSTR(generic-param-dlr-err)
+    OCTSTR(generic-param-dlr-err)
     OCTSTR(generic-param-dlr-url)
     OCTSTR(generic-param-dlr-mid)
     OCTSTR(generic-param-flash)
@@ -434,6 +434,7 @@ MULTI_GROUP(smsc,
     OCTSTR(generic-status-sent)
     OCTSTR(generic-status-error)
     OCTSTR(generic-foreign-id-regex)
+    OCTSTR(mobile-originated)
     OCTSTR(instances)
 )
 

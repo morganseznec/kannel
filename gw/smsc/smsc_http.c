@@ -144,7 +144,6 @@ static void conndata_destroy(ConnData *conndata)
     octstr_destroy(conndata->dlr_url);
     octstr_destroy(conndata->username);
     octstr_destroy(conndata->password);
-    octstr_destroy(conndata->proxy);
     octstr_destroy(conndata->system_id);
     octstr_destroy(conndata->alt_charset);
     counter_destroy(conndata->open_sends);
@@ -523,23 +522,25 @@ int smsc_http_create(SMSCConn *conn, CfgGroup *cfg)
     cfg_get_bool(&conndata->no_sender, cfg, octstr_imm("no-sender"));
     cfg_get_bool(&conndata->no_coding, cfg, octstr_imm("no-coding"));
     cfg_get_bool(&conndata->no_sep, cfg, octstr_imm("no-sep"));
-    conndata->proxy = cfg_get(cfg, octstr_imm("system-id"));
+    cfg_get_bool(&conndata->mobile_originated, cfg, octstr_imm("mobile-originated"));
     cfg_get_bool(&ssl, cfg, octstr_imm("use-ssl"));
     conndata->dlr_url = cfg_get(cfg, octstr_imm("dlr-url"));
     conndata->alt_charset = cfg_get(cfg, octstr_imm("alt-charset"));
 
     if (cfg_get_integer(&max_ps, cfg, octstr_imm("max-pending-submits")) == -1 || max_ps < 1)
         max_ps = 10;
-    
     conndata->max_pending_sends = semaphore_create(max_ps);
 
     if (conndata->port <= 0 && conndata->send_url == NULL) {
-        error(0, "Sender and receiver disabled. Dummy SMSC not allowed.");
+        error(0, "HTTP[%s]: Sender and receiver disabled. Dummy SMSC not allowed.",
+              octstr_get_cstr(conn->id));
         goto error;
     }
-    if (conndata->send_url == NULL)
-        panic(0, "HTTP[%s]: Sending not allowed. No 'send-url' specified.",
+    if (conndata->send_url == NULL) {
+        error(0, "HTTP[%s]: Sending not allowed. No 'send-url' specified.",
               octstr_get_cstr(conn->id));
+        goto error;
+    }
 
     /* callback struct is always in the format: smsc_http_XXX_callback where XXX is our type */
     callbackname = octstr_format("smsc_http_%S_callback", type);

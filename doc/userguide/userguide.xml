@@ -54,7 +54,7 @@
 	</author>
 	<author>
 		<firstname>Aarno</firstname>
-		<surname>Syv&auml;nen</surname>
+		<surname>Syv&#228;nen</surname>
 		<affiliation>
 			<jobtitle>Chief MMS Developer</jobtitle>
 			<orgname>Global Networks Inc.</orgname>
@@ -4671,6 +4671,18 @@ send-url = "http://localhost:20022"
        requests. As a guideline it is recommended that no more than
        10 (default) requests are outstanding at any time.
     </entry></row>
+
+   <row><entry><literal>system-id</literal></entry>
+   <entry><literal>string</literal></entry>
+   <entry valign="bottom">
+      Clickatell only: API id.
+   </entry></row>
+
+   <row><entry><literal>mobile-originated</literal></entry>
+   <entry><literal>integer</literal></entry>
+   <entry valign="bottom">
+      Clickatell only: 'mo' parameter used for a two-way service (0 or 1).
+   </entry></row>
    </tbody></tgroup></informaltable>
 
 <sect3>
@@ -5436,7 +5448,7 @@ marked as "not tested" because the table is still new.</para>
    </row>
 
    <row>
-    <entry spanname="feature">Correctly encodes <literal>&auml;</literal> when sending</entry>
+    <entry spanname="feature">Correctly encodes <literal>&#228;</literal> when sending</entry>
    </row>
    <row>
     <entry></entry>
@@ -5493,7 +5505,7 @@ marked as "not tested" because the table is still new.</para>
    </row>
 
    <row>
-    <entry spanname="feature">Can receive <literal>&auml;</literal> in text messages</entry>
+    <entry spanname="feature">Can receive <literal>&#228;</literal> in text messages</entry>
    </row>
    <row>
     <entry></entry>
@@ -6406,7 +6418,7 @@ ssl-certkey-file
         meaning: it is used to separate multiple phone numbers from
         each other in multi-send. To disable this feature, do not have
         it as an accepted character. If this variable is
-        not set, the default set <literal>"0123456789&nbsp;+-"</literal> is used.
+        not set, the default set <literal>"0123456789&#160;+-"</literal> is used.
      </entry></row>
 
     <row><entry><literal>global-sender</literal></entry>
@@ -10843,7 +10855,7 @@ values:
               create 640 kannel adm
               sharedscripts
               postrotate
-                    killall -USR2 bearerbox && killall -HUP smsbox wapbox || true > /dev/null 2> /dev/null
+                    killall -USR2 bearerbox &amp;&amp; killall -HUP smsbox wapbox || true &gt; /dev/null 2&gt; /dev/null
               endscript
         }
         </userinput></screen>

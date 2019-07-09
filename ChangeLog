@@ -1,3 +1,16 @@
+2019-07-09 Alexander Malysh <amalysh @ kannel.org>
+    * doc/userguide/userguide.xml, gw/smsc/http/clickatell.c, gw/smsc/smsc_http.c,
+      gw/smsc/smsc_http_p.h, gwlib/cfg.def: applied patch from Franck Lamasuta.
+      Main changes:
+        - Better support of Clickatell HTTP API (Developer’s Central): from, mo, validity and callback parameters
+        - Better DLR and error management
+ 
+     Minor changes:
+       - Removed useless struct field (conndata->proxy)
+       - Fixed code indentation
+       - Removed tabs in cfg.def
+       - User guide: Fixed invalid character entities (&auml; and &nbsp;) + Fixed literals (& and >)
+
 2019-06-24 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/http.c: this fixes race if no list is in conn pool anymore #802.
       Thanks to Ivan Shcherbak for the fix.
