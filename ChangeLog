@@ -1,3 +1,7 @@
+2019-08-03 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/cfg.c: fixed issue with multiple includes of the same file, we don't bell out
+      anymore, just ignore
+
 2019-07-09 Alexander Malysh <amalysh @ kannel.org>
     * gw/smsc/smsc_cimd2.c: use smsc connection id instead of name for DLRs.
 
