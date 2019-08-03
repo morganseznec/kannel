@@ -658,7 +658,7 @@ static FDSet *client_fdset = NULL;
  * Order is sequenced by the enum in the header
  */
 static char *http_methods[] = {
-    "GET", "POST", "HEAD", "PUT"
+    "GET", "POST", "HEAD", "PUT", "DELETE"
 };
 
 /*
@@ -1029,8 +1029,8 @@ static int response_expectation(int method, int status)
     if (status == HTTP_NO_CONTENT ||
         status == HTTP_NOT_MODIFIED ||
         http_status_class(status) == HTTP_STATUS_PROVISIONAL ||
-        method == HTTP_METHOD_HEAD)
-	return expect_no_body;
+        method == HTTP_METHOD_HEAD || method == HTTP_METHOD_DELETE)
+        return expect_no_body;
     else
         return expect_body;
 }
@@ -2224,6 +2224,8 @@ static int parse_request_line(int *method, Octstr **url,
         *method = HTTP_METHOD_HEAD;
     else if (octstr_compare(method_str, octstr_imm("PUT")) == 0)
         *method = HTTP_METHOD_PUT;
+    else if (octstr_compare(method_str, octstr_imm("DELETE")) == 0)
+        *method = HTTP_METHOD_DELETE;
     else
         goto error;
 
@@ -2722,8 +2724,8 @@ void http_send_reply(HTTPClient *client, int status, List *headers,
     	octstr_format_append(response, "%S\r\n", gwlist_get(headers, i));
     octstr_format_append(response, "\r\n");
     
-    if (body != NULL && client->method != HTTP_METHOD_HEAD)
-    	octstr_append(response, body);
+    if (body != NULL && client->method != HTTP_METHOD_HEAD && client->method != HTTP_METHOD_DELETE)
+        octstr_append(response, body);
 	
     ret = conn_write(client->conn, response);
     octstr_destroy(response);
@@ -3664,6 +3666,9 @@ int http_name2method(Octstr *method)
     else if (octstr_str_compare(method, "PUT") == 0) {
         return HTTP_METHOD_PUT;
     }
+    else if (octstr_str_compare(method, "DELETE") == 0) {
+        return HTTP_METHOD_DELETE;
+    }
 
     return -1;
 }
@@ -3671,7 +3676,7 @@ int http_name2method(Octstr *method)
 
 char *http_method2name(int method)
 {
-    gw_assert(method >= HTTP_METHOD_GET && method <= HTTP_METHOD_PUT);
+    gw_assert(method >= HTTP_METHOD_GET && method <= HTTP_METHOD_DELETE);
 
     return http_methods[method-1];
 }
