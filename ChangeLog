@@ -1,4 +1,7 @@
 2019-08-03 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/dbpool_mysql.c: fixed compilation for mysql v8. This fixes #782.
+
+2019-08-03 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/cfg.c: fixed issue with multiple includes of the same file, we don't bell out
       anymore, just ignore
 
