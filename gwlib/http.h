@@ -200,9 +200,10 @@ enum {
  * probably should be.
  */
 enum {
-	HTTP_METHOD_GET = 1,
+	HTTP_METHOD_GET  = 1,
 	HTTP_METHOD_POST = 2,
-	HTTP_METHOD_HEAD = 3
+	HTTP_METHOD_HEAD = 3,
+	HTTP_METHOD_PUT  = 4
 };
 
 /*

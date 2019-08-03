@@ -1,4 +1,8 @@
 2019-08-03 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/http.[ch]: added PUT support.
+      Thanks to Lamasuta, Franck <franck.lamasuta at vodafone.com> for this patch.
+
+2019-08-03 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/dbpool_mysql.c: fixed compilation for mysql v8. This fixes #782.
 
 2019-08-03 Alexander Malysh <amalysh @ kannel.org>
