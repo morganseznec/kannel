@@ -262,7 +262,7 @@ int date_parse_iso (struct universaltime *ut, Octstr *os)
         ut->month--;
      
     while (p < q && !gw_isdigit(*p))
-        p++;     
+        p++;
     if (sscanf(p, "%2ld%n", &ut->day, &n) < 1)
         return 0;
     p += n;
