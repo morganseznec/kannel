@@ -1216,6 +1216,7 @@ static void init_smsbox_routes(Cfg *cfg, int reload)
             }
             gwlist_destroy(items, octstr_destroy_item);
             octstr_destroy(shortcuts);
+            octstr_destroy(smsc_ids);
         }
         octstr_destroy(boxc_id);
     }

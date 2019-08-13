@@ -1,3 +1,7 @@
+2019-08-13 Alexander Malysh <amalysh @ kannel.org>
+    * gw/bb_boxc.c: fixed memleak.
+      Thanks to Denis S.Davydov.
+
 2019-08-03 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/http.[ch]: added DELETE moethod support.
 
