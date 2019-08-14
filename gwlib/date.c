@@ -290,7 +290,7 @@ int date_parse_iso (struct universaltime *ut, Octstr *os)
         return 0;
     p += n;
 
-    if (*p == ',') {
+    if (*p == '.') {
         long fract;
         /* fraction */
         p++;
