@@ -1,3 +1,7 @@
+2019-11-27  Stipe Tolj  <stolj at kannel.org>
+    * gw/bb_smscconn.c: fix missing DLR SMSC FAIL payload <NACK/xxx> for 
+      concatenated messages.
+      
 2019-08-13 Alexander Malysh <amalysh @ kannel.org>
     * gw/bb_boxc.c: fixed memleak.
       Thanks to Denis S.Davydov.

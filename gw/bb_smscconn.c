@@ -206,7 +206,7 @@ void bb_smscconn_killed(void)
 }
 
 
-static void handle_split(SMSCConn *conn, Msg *msg, long reason)
+static void handle_split(SMSCConn *conn, Msg *msg, long reason, Octstr *reply)
 {
     struct split_parts *split = msg->sms.split_parts;
     
@@ -266,12 +266,14 @@ static void handle_split(SMSCConn *conn, Msg *msg, long reason)
         msg = split->orig;
         msg->sms.split_parts = NULL;
         if (split->status == SMSCCONN_SUCCESS)
-            bb_smscconn_sent(conn, msg, NULL);
+            bb_smscconn_sent(conn, msg, reply);
         else {
             debug("bb.sms.splits", 0, "Parts of concatenated message failed.");
-            bb_smscconn_send_failed(conn, msg, split->status, NULL);
+            bb_smscconn_send_failed(conn, msg, split->status, reply);
         }
         gw_free(split);
+    } else {
+        octstr_destroy(reply);
     }
 }
 
@@ -279,8 +281,7 @@ static void handle_split(SMSCConn *conn, Msg *msg, long reason)
 void bb_smscconn_sent(SMSCConn *conn, Msg *sms, Octstr *reply)
 {
     if (sms->sms.split_parts != NULL) {
-        handle_split(conn, sms, SMSCCONN_SUCCESS);
-        octstr_destroy(reply);
+        handle_split(conn, sms, SMSCCONN_SUCCESS, reply);
         return;
     }
 
@@ -328,8 +329,7 @@ void bb_smscconn_sent(SMSCConn *conn, Msg *sms, Octstr *reply)
 void bb_smscconn_send_failed(SMSCConn *conn, Msg *sms, int reason, Octstr *reply)
 {
     if (sms->sms.split_parts != NULL) {
-        handle_split(conn, sms, reason);
-        octstr_destroy(reply);
+        handle_split(conn, sms, reason, reply);
         return;
     }
     
@@ -392,16 +392,15 @@ void bb_smscconn_send_failed(SMSCConn *conn, Msg *sms, int reason, Octstr *reply
         }
 
         /* generate relay confirmancy message */
-        if (DLR_IS_SMSC_FAIL(sms->sms.dlr_mask) ||
-	    DLR_IS_FAIL(sms->sms.dlr_mask)) {
+        if (DLR_IS_SMSC_FAIL(sms->sms.dlr_mask) || DLR_IS_FAIL(sms->sms.dlr_mask)) {
             Msg *dlrmsg;
 
-	    if (reply == NULL)
-	        reply = octstr_create("");
+            if (reply == NULL)
+                reply = octstr_create("");
 
-	    octstr_insert_data(reply, 0, "NACK/", 5);
+            octstr_insert_data(reply, 0, "NACK/", 5);
             dlrmsg = create_dlr_from_msg((conn ? (conn->id?conn->id:conn->name) : NULL), sms,
-	                                 reply, DLR_SMSC_FAIL);
+                                         reply, DLR_SMSC_FAIL);
             if (dlrmsg != NULL) {
                 bb_smscconn_receive(conn, dlrmsg);
             }
