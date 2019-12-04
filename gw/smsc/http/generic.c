@@ -282,6 +282,22 @@ static void generic_receive_sms(SMSCConn *conn, HTTPClient *client,
 
     dlrmask = SMS_PARAM_UNDEFINED;
 
+    /* Parse for HTTP POST data */
+    if (conndata->use_post && octstr_len(body) > 0) {
+        Octstr *type, *charset;
+
+        type = charset = NULL;
+        http_header_get_content_type(headers, &type, &charset);
+        if (octstr_case_compare(type, octstr_imm("application/x-www-form-urlencoded")) == 0) {
+            parse_cgivars(cgivars, body);
+        } else {
+            warning(0, "HTTP[%s]: Received HTTP POST with wrong content-type `%s', should be `application/x-www-form-urlencoded'.",
+                    octstr_get_cstr(conn->id), octstr_get_cstr(type));
+        }
+        octstr_destroy(type);
+        octstr_destroy(charset);
+    }
+
     /* Parse enough parameters to validate the request */
     user = http_cgi_variable(cgivars, octstr_get_cstr(fm->username));
     pass = http_cgi_variable(cgivars, octstr_get_cstr(fm->password));
@@ -452,6 +468,7 @@ static int generic_send_sms(SMSCConn *conn, Msg *sms)
     ConnData *conndata = conn->data;
     Octstr *url = NULL;
     List *headers;
+    HTTPURLParse *p;
 
     /* We use the escape code population function from our
      * URLTranslation module to fill in the appropriate values
@@ -459,10 +476,25 @@ static int generic_send_sms(SMSCConn *conn, Msg *sms)
     url = urltrans_fill_escape_codes(conndata->send_url, sms);
 
     headers = gwlist_create();
-    debug("smsc.http.generic", 0, "HTTP[%s]: Sending request <%s>",
-          octstr_get_cstr(conn->id), octstr_get_cstr(url));
-    http_start_request(conndata->http_ref, HTTP_METHOD_GET, url, headers,
-                       NULL, 0, sms, NULL);
+
+    /* Split now in HTTP GET or HTTP POST handling. */
+    if (conndata->use_post && (p = parse_url(url)) != NULL) {
+        octstr_destroy(url);
+        url = octstr_format("%s%s:%ld%s",
+                octstr_get_cstr(p->scheme), octstr_get_cstr(p->host),
+                p->port, octstr_get_cstr(p->path));
+        debug("smsc.http.generic", 0, "HTTP[%s]: Sending POST request <%s>",
+              octstr_get_cstr(conn->id), octstr_get_cstr(url));
+        http_header_add(headers, "Content-Type", "application/x-www-form-urlencoded; charset=\"UTF-8\"");
+        http_start_request(conndata->http_ref, HTTP_METHOD_POST, url, headers,
+                           p->query, 0, sms, NULL);
+        http_urlparse_destroy(p);
+    } else {
+        debug("smsc.http.generic", 0, "HTTP[%s]: Sending GET request <%s>",
+              octstr_get_cstr(conn->id), octstr_get_cstr(url));
+        http_start_request(conndata->http_ref, HTTP_METHOD_GET, url, headers,
+                           NULL, 0, sms, NULL);
+    }
 
     octstr_destroy(url);
     http_destroy_headers(headers);

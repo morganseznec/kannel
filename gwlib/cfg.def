@@ -359,6 +359,7 @@ MULTI_GROUP(smsc,
     OCTSTR(pin)
     OCTSTR(phone)
     OCTSTR(send-url)
+    OCTSTR(use-post)
     OCTSTR(dlr-url)    
     OCTSTR(sender-prefix)
     OCTSTR(flow-control)

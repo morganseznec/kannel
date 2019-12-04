@@ -4685,6 +4685,15 @@ send-url = "http://localhost:20022"
    </entry></row>
    </tbody></tgroup></informaltable>
 
+   <row><entry><literal>use-post</literal></entry>
+     <entry><literal>boolean</literal></entry>
+     <entry valign="bottom">
+       Generic only: Defines if a HTTP POST method with a content-type
+       <literal>application/x-www-form-urlencoded</literal> should
+       be used rather then the HTTP GET method. If set, both 
+       directions will use the HTTP POST method. (Default: no)
+     </entry></row>
+
 <sect3>
 <title>The "generic" system-type</title>
 

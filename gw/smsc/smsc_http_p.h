@@ -99,6 +99,7 @@ typedef struct conndata {
     int no_sender;      /* ditto */
     int no_coding;      /* this, too */
     int no_sep;         /* not to mention this */
+    int use_post;       /* indicate we will use HTTP POST instead of GET */
     Octstr *alt_charset;/* alternative charset use */
     List *msg_to_send;  /* our send queue */
 

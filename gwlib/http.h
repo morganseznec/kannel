@@ -270,6 +270,14 @@ HTTPURLParse *parse_url(Octstr *url);
  */
 void parse_dump(HTTPURLParse *p);
 
+/*
+ * Parse CGI variables in <pairs> (query string in url or request body)
+ * Expected format: var1=value1&var2&var3=value3...
+ * Append HTTPCGIvar pointers to supplied list
+ */
+void parse_cgivars(List *cgivars, Octstr *pairs);
+
+
 
 /***********************************************************************
  * HTTP proxy interface.

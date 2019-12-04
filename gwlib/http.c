@@ -2538,7 +2538,7 @@ void http_close_all_ports(void)
  * Expected format: var1=value1&var2&var3=value3...
  * Append HTTPCGIvar pointers to supplied list
  */
-static void parse_cgivars(List *cgivars, Octstr *pairs)
+void parse_cgivars(List *cgivars, Octstr *pairs)
 {
     HTTPCGIVar *v;
     Octstr *pair;

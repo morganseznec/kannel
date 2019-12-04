@@ -1,4 +1,20 @@
 2019-12-04  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: document 'use-post' for generic type
+      of HTTP SMSC.
+    * gw/smsc_http_p.h: add use_post flag.
+    * gw/smsc_http.c: use 'use-post' boolean config from 'group = smsc'.
+    * gw/smsc/http/generic.c: implement HTTP POST method support for the
+      sending and receiving side of the 'system-type = generic'.
+    * gwlib/cfg.def: add 'use-post' config directive to 'group = smsc'.
+    * gwlib/http.[ch]: export function parse_cgivars() publically.
+    This patchset adds support for the HTTP POST method for the SMSC HTTP
+    type 'generic'. Handling long Unicode messages can easily exceed the
+    max length limits of HTTP GET URLs on various HTTP servers and HTTP
+    proxy components, causing HTTP/502 and other defects in processing.
+    Now we can use content-type 'application/x-www-form-urlencoded' data
+    in the HTTP POST body to overcome those limitations if necessary.
+    
+2019-12-04  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: clarify dlr-url and dlr-mask usage in
       'group = sendsms-user' contexts.
     * gw/smsbox.c: fix non-working 'dlr-url' for 'group = sendsms-user',

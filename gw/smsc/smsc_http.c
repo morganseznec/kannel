@@ -526,6 +526,7 @@ int smsc_http_create(SMSCConn *conn, CfgGroup *cfg)
     cfg_get_bool(&ssl, cfg, octstr_imm("use-ssl"));
     conndata->dlr_url = cfg_get(cfg, octstr_imm("dlr-url"));
     conndata->alt_charset = cfg_get(cfg, octstr_imm("alt-charset"));
+    cfg_get_bool(&conndata->use_post, cfg, octstr_imm("use-post"));
 
     if (cfg_get_integer(&max_ps, cfg, octstr_imm("max-pending-submits")) == -1 || max_ps < 1)
         max_ps = 10;
