@@ -512,6 +512,7 @@ MULTI_GROUP(sendsms-user,
     OCTSTR(white-list)
     OCTSTR(black-list)
     OCTSTR(dlr-url)
+    OCTSTR(dlr-mask)
     OCTSTR(allowed-prefix-regex)
     OCTSTR(denied-prefix-regex)
     OCTSTR(white-list-regex)

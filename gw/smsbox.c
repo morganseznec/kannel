@@ -315,7 +315,7 @@ static Counter *catenated_sms_counter;
 static int send_message(URLTranslation *trans, Msg *msg)
 {
     int max_msgs;
-    Octstr *header, *footer, *suffix, *split_chars;
+    Octstr *header, *footer, *suffix, *split_chars, *dlr_url;
     int catenate;
     unsigned long msg_sequence, msg_count;
     List *list;
@@ -368,6 +368,7 @@ static int send_message(URLTranslation *trans, Msg *msg)
         suffix = urltrans_split_suffix(trans);
         split_chars = urltrans_split_chars(trans);
         catenate = urltrans_concatenation(trans);
+        dlr_url = urltrans_dlr_url(trans);
 
         /*
          * If there hasn't been yet any DLR-URL set in the message
@@ -375,9 +376,12 @@ static int send_message(URLTranslation *trans, Msg *msg)
          * hence the 'group = sms-service' context group, then use
          * them in the message.
          */
-        if (msg->sms.dlr_url == NULL &&
-                (msg->sms.dlr_url = octstr_duplicate(urltrans_dlr_url(trans))) != NULL)
-            msg->sms.dlr_mask = urltrans_dlr_mask(trans);
+        if (octstr_len(msg->sms.dlr_url) == 0 && dlr_url != NULL) {
+            octstr_destroy(msg->sms.dlr_url);
+            msg->sms.dlr_url = octstr_duplicate(dlr_url);
+            if (!DLR_IS_ENABLED(msg->sms.dlr_mask))
+                msg->sms.dlr_mask = urltrans_dlr_mask(trans);
+        }
     }
 
     if (catenate)

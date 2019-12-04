@@ -1,3 +1,17 @@
+2019-12-04  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: clarify dlr-url and dlr-mask usage in
+      'group = sendsms-user' contexts.
+    * gw/smsbox.c: fix non-working 'dlr-url' for 'group = sendsms-user',
+      which would never trigger the if statement, since the upper layer
+      of the sendsms HTTP interface would init msg->sms.dlr_url with a 
+      empty string; now we handle also a 'dlr-mask' in the group as
+      default value if no HTTP GET paramter is presented.
+    * gw/urltrans.c: ensure we also use 'dlr-mask' as config directive in
+      the 'group = sendsms-user' context as possible default.
+    * gwlib/cfg.def: add 'dlr-mask' to 'group = sendsms-user'.
+    This patchset fixes the default 'dlr-url' handling for the sendsms-user
+    group handling, where the default would effetively never be handled.    
+      
 2019-11-27  Stipe Tolj  <stolj at kannel.org>
     * gw/bb_smscconn.c: fix missing DLR SMSC FAIL payload <NACK/xxx> for 
       concatenated messages.
@@ -69,7 +83,7 @@
       reload config in bb_graceful_restart() and call the sub-module reload
       functions.
     * gw/bearebox.h: change prototype for smsc2_graceful_restart().
-    Thhis patchsets implement the reloading (aka graceful restart) capabilities
+    This patchsets implement the reloading (aka graceful restart) capabilities
     for the MO direction smsbox routing groups.
 
 2018-09-26 Alexander Malysh <amalysh @ kannnel.org>
