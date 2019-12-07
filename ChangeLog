@@ -1,3 +1,9 @@
+2019-12-07  Stipe Tolj  <stolj at kannel.org>
+    * gw/smsc/http/generic.c: allow using the 'alt-charset' usage in the MT
+      direction too, to transcode the payload before URL-encoding and 
+      setting the corresponding charset="" value in the content-type header
+      for HTTP POST methods.
+      
 2019-12-04  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: document 'use-post' for generic type
       of HTTP SMSC.
