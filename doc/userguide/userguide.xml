@@ -4683,7 +4683,6 @@ send-url = "http://localhost:20022"
    <entry valign="bottom">
       Clickatell only: 'mo' parameter used for a two-way service (0 or 1).
    </entry></row>
-   </tbody></tgroup></informaltable>
 
    <row><entry><literal>use-post</literal></entry>
      <entry><literal>boolean</literal></entry>
@@ -4692,7 +4691,8 @@ send-url = "http://localhost:20022"
        <literal>application/x-www-form-urlencoded</literal> should
        be used rather then the HTTP GET method. If set, both 
        directions will use the HTTP POST method. (Default: no)
-     </entry></row>
+   </entry></row>
+   </tbody></tgroup></informaltable>
 
 <sect3>
 <title>The "generic" system-type</title>

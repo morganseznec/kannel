@@ -1,3 +1,7 @@
+2019-12-10  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: fixed last commit, wrong XML struct.
+    Thanks to Alexander Malysh for pointing to this.
+    
 2019-12-07  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/http/generic.c: allow using the 'alt-charset' usage in the MT
       direction too, to transcode the payload before URL-encoding and 
