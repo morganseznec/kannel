@@ -508,7 +508,7 @@ Octstr *urltrans_fill_escape_codes(Octstr *pattern, Msg *request)
 
     case 'n':
         if (request->sms.service == NULL)
-        break;
+            break;
         enc = octstr_duplicate(request->sms.service);
         octstr_url_encode(enc);
         octstr_append(result, enc);
@@ -640,12 +640,21 @@ Octstr *urltrans_fill_escape_codes(Octstr *pattern, Msg *request)
         octstr_format_append(result, "%ld", request->sms.time);
         break;
 
-    case 'u':
+    case 'u': /* UDH, URL-encoded */
         if(octstr_len(request->sms.udhdata)) {
-        enc = octstr_duplicate(request->sms.udhdata);
-        octstr_url_encode(enc);
-        octstr_append(result, enc);
-        octstr_destroy(enc);
+            enc = octstr_duplicate(request->sms.udhdata);
+            octstr_url_encode(enc);
+            octstr_append(result, enc);
+            octstr_destroy(enc);
+        }
+        break;
+
+    case 'U': /* UDH, printable hexadecimal byte codes */
+        if(octstr_len(request->sms.udhdata)) {
+            enc = octstr_duplicate(request->sms.udhdata);
+            octstr_binary_to_hex(enc, 1);
+            octstr_append(result, enc);
+            octstr_destroy(enc);
         }
         break;
 

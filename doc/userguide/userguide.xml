@@ -7337,7 +7337,12 @@ recoded from Unicode, it will be "WINDOWS-1252"
 </entry></row>
 
 <row><entry><literal>%u</literal></entry><entry>
-<literal>udh</literal> of incoming message
+<literal>udh</literal> of incoming message (URL-encoded)
+</entry></row>
+
+<row><entry><literal>%U</literal></entry><entry>
+<literal>udh</literal> of incoming message (printable hexadecimal byte codes). 
+I.e. "xyz" would be send as byte codes "78797A".
 </entry></row>
 
 <row><entry><literal>%B</literal></entry><entry>

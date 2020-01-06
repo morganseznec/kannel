@@ -1,3 +1,7 @@
+2020-01-06 Alexander Malysh <amalysh @ kannel.org>
+    * doc/userguide/userguide.xml, gw/urltrans.c: added %U escape code for
+      hexcoded UDH.
+
 2019-12-10  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: fixed last commit, wrong XML struct.
     Thanks to Alexander Malysh for pointing to this.
