@@ -403,6 +403,7 @@ MULTI_GROUP(smsc,
     OCTSTR(preferred-prefix-regex)
     OCTSTR(max-error-count)
     OCTSTR(alt-addr-charset)
+    OCTSTR(retry)
     OCTSTR(status-success-regex)
     OCTSTR(status-permfail-regex)
     OCTSTR(status-tempfail-regex)

@@ -179,6 +179,7 @@ typedef struct {
     Octstr *alt_charset;
     Octstr *alt_addr_charset;
     long connection_timeout;
+    int retry; /* always retry to connect,even if pass/username wrong */
     long wait_ack;
     int wait_ack_action;
     int esm_class;
@@ -2035,7 +2036,8 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                 mutex_lock(smpp->conn->flow_mutex);
                 smpp->conn->status = SMSCCONN_DISCONNECTED;
                 mutex_unlock(smpp->conn->flow_mutex);
-                if (pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSID ||
+                if (!smpp->retry &&
+                    pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSID ||
                     pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVPASWD ||
                     pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSTYP) {
                     smpp->quitting = 1;
@@ -2069,7 +2071,8 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                  mutex_lock(smpp->conn->flow_mutex);
                  smpp->conn->status = SMSCCONN_DISCONNECTED;
                  mutex_unlock(smpp->conn->flow_mutex);
-                 if (pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSID ||
+                if (!smpp->retry &&
+                     pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSID ||
                      pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVPASWD ||
                      pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSTYP) {
                      smpp->quitting = 1;
@@ -2103,7 +2106,8 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                  mutex_lock(smpp->conn->flow_mutex);
                  smpp->conn->status = SMSCCONN_DISCONNECTED;
                  mutex_unlock(smpp->conn->flow_mutex);
-                 if (pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSID ||
+                if (!smpp->retry &&
+                     pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSID ||
                      pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVPASWD ||
                      pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSTYP) {
                      smpp->quitting = 1;
@@ -2791,6 +2795,10 @@ int smsc_smpp_create(SMSCConn *conn, CfgGroup *grp)
     cfg_get_integer(&smpp->bind_addr_ton, grp, octstr_imm("bind-addr-ton"));
     cfg_get_integer(&smpp->bind_addr_npi, grp, octstr_imm("bind-addr-npi"));
 
+    /* set connect retry, default false */
+    if (cfg_get_bool(&smpp->retry, grp, octstr_imm("retry")) == -1)
+        smpp->retry = 0;
+    
     cfg_get_bool(&smpp->use_ssl, grp, octstr_imm("use-ssl"));
     if (smpp->use_ssl)
 #ifndef HAVE_LIBSSL
