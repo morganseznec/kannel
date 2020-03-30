@@ -1,6 +1,10 @@
+2020-03-30  Stipe Tolj  <stolj at kannel.org>
+    * gw/dlr_redis.c: fix dlr_redis_update() to get correct DLR entry updates,
+      i.e. for intermediate events.
+
 2020-01-06 Alexander Malysh <amalysh @ kannel.org>
-   * gw/smsc/smsc_smpp.c, doc/userguide.xml, gwlib/cfg.def: added new config
-     option to retry even if SMSC rejects login due to wrong username & password.
+    * gw/smsc/smsc_smpp.c, doc/userguide.xml, gwlib/cfg.def: added new config
+      option to retry even if SMSC rejects login due to wrong username & password.
 
 2020-01-06 Alexander Malysh <amalysh @ kannel.org>
     * doc/userguide/userguide.xml, gw/urltrans.c: added %U escape code for
