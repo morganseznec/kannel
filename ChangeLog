@@ -1,3 +1,6 @@
+2020-05-04 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/http.[ch]: added http PATCH method support
+
 2020-03-30  Stipe Tolj  <stolj at kannel.org>
     * gw/dlr_redis.c: fix dlr_redis_update() to get correct DLR entry updates,
       i.e. for intermediate events.

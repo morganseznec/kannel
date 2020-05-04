@@ -658,7 +658,7 @@ static FDSet *client_fdset = NULL;
  * Order is sequenced by the enum in the header
  */
 static char *http_methods[] = {
-    "GET", "POST", "HEAD", "PUT", "DELETE"
+    "GET", "POST", "HEAD", "PUT", "DELETE", "PATCH"
 };
 
 /*
@@ -1603,7 +1603,7 @@ static int send_request(HTTPServer *trans)
     char buf[128];    
     Octstr *request = NULL;
 
-    if (trans->method == HTTP_METHOD_POST || trans->method == HTTP_METHOD_PUT) {
+    if (trans->method == HTTP_METHOD_POST || trans->method == HTTP_METHOD_PATCH || trans->method == HTTP_METHOD_PUT) {
         /* 
          * Add a Content-Length header.  Override an existing one, if
          * necessary.  We must have an accurate one in order to use the
@@ -2216,17 +2216,8 @@ static int parse_request_line(int *method, Octstr **url,
     version = gwlist_get(words, 2);
     gwlist_destroy(words, NULL);
 
-    if (octstr_compare(method_str, octstr_imm("GET")) == 0)
-        *method = HTTP_METHOD_GET;
-    else if (octstr_compare(method_str, octstr_imm("POST")) == 0)
-        *method = HTTP_METHOD_POST;
-    else if (octstr_compare(method_str, octstr_imm("HEAD")) == 0)
-        *method = HTTP_METHOD_HEAD;
-    else if (octstr_compare(method_str, octstr_imm("PUT")) == 0)
-        *method = HTTP_METHOD_PUT;
-    else if (octstr_compare(method_str, octstr_imm("DELETE")) == 0)
-        *method = HTTP_METHOD_DELETE;
-    else
+    *method = http_name2method(method_str);
+    if (*method == -1)
         goto error;
 
     ret = parse_http_version(version);
@@ -3669,6 +3660,9 @@ int http_name2method(Octstr *method)
     else if (octstr_str_compare(method, "DELETE") == 0) {
         return HTTP_METHOD_DELETE;
     }
+    else if (octstr_str_compare(method, "PATCH") == 0) {
+        return HTTP_METHOD_PATCH;
+    }
 
     return -1;
 }
@@ -3676,7 +3670,7 @@ int http_name2method(Octstr *method)
 
 char *http_method2name(int method)
 {
-    gw_assert(method >= HTTP_METHOD_GET && method <= HTTP_METHOD_DELETE);
+    gw_assert(method >= HTTP_METHOD_GET && method <= HTTP_METHOD_PATCH);
 
     return http_methods[method-1];
 }
