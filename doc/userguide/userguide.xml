@@ -2969,6 +2969,21 @@ secret-nas = radius
 			to smsc-id B would look like: "A,111,222; B,333,444".
      </entry></row>
 
+    <row><entry><literal>reroute-receiver-regex</literal></entry>
+      <entry><literal>string</literal></entry>
+      <entry valign="bottom">
+            Similar to 'reroute-receiver'. Defines the explicit smsc-id routes 
+            for specific receiver number regex patterns of messages that are coming from 
+            this smsc connection.
+            Format is that first comes the smsc-id to route the message to, then 
+            all receiver numbers as regular expressions that should be routed, 
+            separated with comma (','). 
+            For example, route receivers that start with 1 and 2 to smsc-id A and 
+            those that start with 3 and 4 to smsc-id B would look like: 
+            "A,^1.*,^2.*; B,^3.*,^4.*". (Please ensure the reserved characters ';' and ','
+            are not used in the regular expression to avoid parsing errors).
+     </entry></row>
+
     <row><entry><literal>reroute-dlr</literal></entry>
       <entry><literal>boolean</literal></entry>
       <entry valign="bottom">

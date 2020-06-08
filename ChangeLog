@@ -1,3 +1,12 @@
+2020-06-08  Stipe Tolj  <stolj at kannel.org>
+    * doc/userguide/userguide.xml: document new 'reroute-receiver-regex' directive.
+    * gw/bb_smscconn.c: handle 'reroute-receiver-regex' in route_incoming_to_smsc().
+    * gw/smscconn_p.h: add a List in struct smscconn for reroute-receiver-regex.
+    * gw/smscconn.c: init and de-init handling of reroute-receiver-regex.
+    * gwlib/cfg.def: add directive 'reroute-receiver-regex'.
+    This patchset allows defining regex patterns for receiver numbers when doing 
+    re-routing of MOs towards MTs.
+    
 2020-06-03  Stipe Tolj  <stolj at kannel.org>
     * gw/smsc/smsc_fake.c, test/fakesmsc.c: add type 'utf8' to allow simple
       injection of UTF-8 encoded MOs.

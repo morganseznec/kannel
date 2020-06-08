@@ -754,26 +754,27 @@ static int cmp_rout_grp_checksum(void *a, void *b)
 	SMSCConn *conn = a;
 	Octstr *os;
 
-	os = cfg_get_group_checksum((CfgGroup*)b,
-		    OCTSTR(denied-smsc-id),
-		    OCTSTR(allowed-smsc-id),
-		    OCTSTR(preferred-smsc-id),
-		    OCTSTR(allowed-prefix),
-		    OCTSTR(denied-prefix),
-		    OCTSTR(preferred-prefix),
-		    OCTSTR(unified-prefix),
-		    OCTSTR(reroute),
-		    OCTSTR(reroute-smsc-id),
-		    OCTSTR(reroute-receiver),
-		    OCTSTR(reroute-dlr),
-		    OCTSTR(allowed-smsc-id-regex),
-		    OCTSTR(denied-smsc-id-regex),
-		    OCTSTR(preferred-smsc-id-regex),
-		    OCTSTR(allowed-prefix-regex),
-		    OCTSTR(denied-prefix-regex),
-		    OCTSTR(preferred-prefix-regex),
-		    NULL
-	);
+    os = cfg_get_group_checksum((CfgGroup*)b,
+            OCTSTR(denied-smsc-id),
+            OCTSTR(allowed-smsc-id),
+            OCTSTR(preferred-smsc-id),
+            OCTSTR(allowed-prefix),
+            OCTSTR(denied-prefix),
+            OCTSTR(preferred-prefix),
+            OCTSTR(unified-prefix),
+            OCTSTR(reroute),
+            OCTSTR(reroute-smsc-id),
+            OCTSTR(reroute-receiver),
+            OCTSTR(reroute-receiver-regex),
+            OCTSTR(reroute-dlr),
+            OCTSTR(allowed-smsc-id-regex),
+            OCTSTR(denied-smsc-id-regex),
+            OCTSTR(preferred-smsc-id-regex),
+            OCTSTR(allowed-prefix-regex),
+            OCTSTR(denied-prefix-regex),
+            OCTSTR(preferred-prefix-regex),
+            NULL
+    );
 
 	ret = (octstr_compare(conn->chksum_conn, os) == 0);
 	octstr_destroy(os);
@@ -1961,10 +1962,31 @@ static long route_incoming_to_smsc(SMSCConn *conn, Msg *msg)
         msg->sms.sms_type = mt_push;
         store_save(msg);
         /* route by receiver number */
-        /* XXX implement wildcard matching too! */
         octstr_destroy(msg->sms.smsc_id);
         msg->sms.smsc_id = octstr_duplicate(smsc);
         return smsc2_rout(msg, 0);
+    }
+
+    if (conn->reroute_by_receiver_regex && msg->sms.receiver) {
+        int i, l;
+        pattern_route *r;
+
+        l = gwlist_len(conn->reroute_by_receiver_regex);
+        for (i = 0; i < l; i++) {
+            r = gwlist_get(conn->reroute_by_receiver_regex, i);
+            /* match against regex pattern */
+            if (r != NULL && r->re != NULL &&
+                    gw_regex_match_pre(r->re, msg->sms.receiver) == 1) {
+                /* matched, change message direction */
+                store_save_ack(msg, ack_success);
+                msg->sms.sms_type = mt_push;
+                store_save(msg);
+                /* route by receiver number */
+                octstr_destroy(msg->sms.smsc_id);
+                msg->sms.smsc_id = octstr_duplicate(r->id);
+                return smsc2_rout(msg, 0);
+            }
+        }
     }
 
     return -1; 

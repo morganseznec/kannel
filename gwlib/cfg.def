@@ -322,6 +322,7 @@ MULTI_GROUP(smsc,
     OCTSTR(reroute)
     OCTSTR(reroute-smsc-id)
     OCTSTR(reroute-receiver)
+    OCTSTR(reroute-receiver-regex)
     OCTSTR(reroute-dlr)
     OCTSTR(log-file)
     OCTSTR(log-level)
