@@ -1,3 +1,12 @@
+2020-06-19  Stipe Tolj  <stolj at kannel.org>
+    * bb_smscconn.c: fix smsc2_remove_smsc() which didn't calibrate the i counter
+      when a SMSC connection is removed, so we would step over one index in the list
+      without trying to match it's smsc-id, and fix smsc2_add_smsc() for SMSC group
+      with multiple instances indicated, this would only start-up one instance, 
+      even if several would be configured.
+    Thanks to Roberto Facchin for providing the reporting.
+    [Msg-Id: <674281A5-E42B-4B2F-9D0C-1C5328787FDB@getmailspring.com>]
+    
 2020-06-08  Stipe Tolj  <stolj at kannel.org>
     * doc/userguide/userguide.xml: document new 'reroute-receiver-regex' directive.
     * gw/bb_smscconn.c: handle 'reroute-receiver-regex' in route_incoming_to_smsc().

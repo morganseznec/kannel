@@ -1092,9 +1092,9 @@ int smsc2_remove_smsc(Octstr *id)
     gw_rwlock_wrlock(&smsc_list_lock);
 
     gwlist_add_producer(smsc_list);
-    while((i = smsc2_find(id, ++i)) != -1) {
+    while ((i = smsc2_find(id, ++i)) != -1) {
         conn = gwlist_get(smsc_list, i);
-        gwlist_delete(smsc_list, i, 1);
+        gwlist_delete(smsc_list, i--, 1);
         smscconn_shutdown(conn, 0);
         smscconn_destroy(conn);
         success = 1;
@@ -1114,7 +1114,7 @@ int smsc2_add_smsc(Octstr *id)
     CfgGroup *grp;
     SMSCConn *conn;
     Octstr *smscid = NULL;
-    long i;
+    long i, m, j;
     int success = 0;
 
     if (!smsc_running)
@@ -1142,15 +1142,22 @@ int smsc2_add_smsc(Octstr *id)
 
         if (smscid != NULL && octstr_compare(smscid, id) == 0) {
             conn = smscconn_create(grp, 1);
-            if (conn != NULL) {
-                gwlist_append(smsc_list, conn);
-                if (conn->dead_start) {
-                    /* Shutdown connection if it's not configured to connect at start-up time */
-                    smscconn_shutdown(conn, 0);
+            /* multiple instances for the same group? */
+            m = smscconn_instances(grp);
+            for (j = 0; j < m; j++) {
+                conn = smscconn_create(grp, 1);
+                if (conn != NULL) {
+                    gwlist_append(smsc_list, conn);
+                    if (conn->dead_start) {
+                        /* Shutdown connection if it's not configured to connect at start-up time */
+                        smscconn_shutdown(conn, 0);
+                    } else {
+                        smscconn_start(conn);
+                    }
+                    success = 1;
                 } else {
-                    smscconn_start(conn);
+                    error(0, "Cannot start with SMSC %s connection failing", octstr_get_cstr(id));
                 }
-                success = 1;
             }
         }
     }
