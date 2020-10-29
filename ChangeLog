@@ -1,3 +1,7 @@
+2020-10-29  Stipe Tolj  <stolj at kannel.org>
+    * gw/meta_data.[ch]: implement meta_data_remove_value() to allow removing values
+      from a group.
+      
 2020-06-19  Stipe Tolj  <stolj at kannel.org>
     * bb_smscconn.c: fix smsc2_remove_smsc() which didn't calibrate the i counter
       when a SMSC connection is removed, so we would step over one index in the list
