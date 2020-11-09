@@ -88,7 +88,7 @@
 #define DUMP_RESPONSE 1
 
 /* define http client connections timeout in seconds (set to -1 for disable) */
-static int http_client_timeout = 240;
+static int http_client_timeout = 30;
 
 /* define http server connections timeout in seconds (set to -1 for disable) */
 #define HTTP_SERVER_TIMEOUT 60

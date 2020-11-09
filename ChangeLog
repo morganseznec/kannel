@@ -1,3 +1,6 @@
+2020-11-09  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/http.c: change default HTTP client side timeout from 240s to 30s.
+     
 2020-10-29  Stipe Tolj  <stolj at kannel.org>
     * gw/meta_data.[ch]: implement meta_data_remove_value() to allow removing values
       from a group.
