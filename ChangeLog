@@ -1,3 +1,6 @@
+2021-03-02  Stipe Tolj  <stolj at kannel.org>
+    * utils/mtbatch.c: add '-M meta-data' support.
+    
 2020-11-09  Stipe Tolj  <stolj at kannel.org>
     * gwlib/http.c: change default HTTP client side timeout from 240s to 30s.
      

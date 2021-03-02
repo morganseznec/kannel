@@ -98,6 +98,7 @@ static Octstr *dlr_url = NULL;
 static Octstr *smsc_id = NULL;
 static double delay = 0;
 static int no_smsbox_id = 0;
+static Octstr *meta_data = NULL;
 
 static void write_pid_file(void) {
     FILE *f;
@@ -252,7 +253,7 @@ static void help(void)
     info(0, "-p port");
     info(0, "    the smsbox port to connect to (default: 13001)");
     info(0, "-s");
-    info(0, "    inidicatr to use SSL for bearerbox connection (default: no)");
+    info(0, "    inidicator to use SSL for bearerbox connection (default: no)");
     info(0, "-i smsbox-id");
     info(0, "    defines the smsbox-id to be used for bearerbox connection (default: none)");
     info(0, "-x");
@@ -271,6 +272,8 @@ static void help(void)
     info(0, "    delay between message sending to bearerbox (default: 0)");
     info(0, "-r smsc-id");
     info(0, "    use a specific route for the MT traffic");
+    info(0, "-M meta-data");
+    info(0, "    defines the meta-data");
 }
 
 static void init_batch(Octstr *cfilename, Octstr *rfilename)
@@ -327,6 +330,7 @@ static unsigned long run_batch(void)
             msg->sms.dlr_url = octstr_duplicate(dlr_url);
             msg->sms.udhdata = octstr_create("");
             msg->sms.coding = DC_7BIT;
+            msg->sms.meta_data = octstr_duplicate(meta_data);
 
             if (send_message(msg) < 0) {
                 linerr++;
@@ -358,7 +362,7 @@ int main(int argc, char **argv)
     bb_port = 13001;
     bb_ssl = 0;
         
-    while ((opt = getopt(argc, argv, "hv:b:p:si:xn:a:f:D:u:d:r:")) != EOF) {
+    while ((opt = getopt(argc, argv, "hv:b:p:si:xn:a:f:D:u:d:r:M:")) != EOF) {
         switch (opt) {
             case 'v':
                 log_set_output_level(atoi(optarg));
@@ -400,7 +404,10 @@ int main(int argc, char **argv)
             case 'r':
                 smsc_id = octstr_create(optarg);
                 break;
-            case '?':
+            case 'M':
+                 meta_data = octstr_create(optarg);
+                 break;
+             case '?':
             default:
                 error(0, "Invalid option %c", opt);
                 help();
@@ -449,6 +456,7 @@ int main(int argc, char **argv)
     octstr_destroy(account);
     octstr_destroy(dlr_url);
     octstr_destroy(smsc_id);
+    octstr_destroy(meta_data);
     counter_destroy(counter);
     gwlist_destroy(lines, octstr_destroy_item); 
    
