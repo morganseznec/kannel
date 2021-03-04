@@ -1,3 +1,7 @@
+2021-03-04  Stipe Tolj  <stolj at kannel.org>
+    * utils/mtbatch.c: add support for various codings (7bit, 8bit, Unicode) via
+      '-c coding' and character transocing via option '-C charset'.
+      
 2021-03-02  Stipe Tolj  <stolj at kannel.org>
     * utils/mtbatch.c: add '-M meta-data' support.
     
