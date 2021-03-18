@@ -404,6 +404,7 @@ static void dlr_spool_add(struct dlr_entry *dlr)
         error(errno, "Could not create directory `%s'.", octstr_get_cstr(dir));
         octstr_destroy(dir);
         octstr_destroy(hash);
+        msg_destroy(msg);
         return;
     }
 
@@ -424,6 +425,7 @@ static void dlr_spool_add(struct dlr_entry *dlr)
     if ((fd = open(octstr_get_cstr(filename), O_CREAT|O_EXCL|O_WRONLY, S_IRUSR|S_IWUSR)) == -1) {
         error(errno, "Could not open file `%s'.", octstr_get_cstr(filename));
         octstr_destroy(filename);
+        msg_destroy(msg);
         return;
     }
 
