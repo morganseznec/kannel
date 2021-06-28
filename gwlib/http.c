@@ -1044,8 +1044,10 @@ static void handle_transaction(Connection *conn, void *data)
     
     trans = data;
 
+    gw_assert(trans->conn == conn);
+
     if (run_status != running) {
-        conn_unregister(conn);
+        conn_unregister(trans->conn);
         return;
     }
 
@@ -1086,7 +1088,7 @@ static void handle_transaction(Connection *conn, void *data)
             break;
 
         case reading_entity:
-            ret = entity_read(trans->response, conn);
+            ret = entity_read(trans->response, trans->conn);
             if (ret < 0) {
                 debug("gwlib.http",0,"Failed reading entity");
                 goto error;
@@ -1223,9 +1225,11 @@ static void handle_transaction(Connection *conn, void *data)
     return;
 
 error:
-    conn_unregister(trans->conn);
-    conn_destroy(trans->conn);
-    trans->conn = NULL;
+    if (trans->conn != NULL) {
+        conn_unregister(trans->conn);
+        conn_destroy(trans->conn);
+        trans->conn = NULL;
+    }
     error(0, "Couldn't fetch <%s>", octstr_get_cstr(trans->url));
     trans->status = -1;
     gwlist_produce(trans->caller, trans);

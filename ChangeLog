@@ -1,4 +1,7 @@
 2021-06-28 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/http.c: use trans->conn instead of direct conn.
+
+2021-06-28 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/http.c: fixed issue with not encoded user & pass in the URL
 
 2021-03-18  Stipe Tolj  <stolj at kannel.org>
