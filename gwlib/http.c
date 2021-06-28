@@ -1497,6 +1497,12 @@ HTTPURLParse *parse_url(Octstr *url)
         p->user = octstr_copy(url, prefix_len, at2 - prefix_len);
         p->pass = (at2 != at) ? octstr_copy(url, at2 + 1, at - at2 - 1) : NULL;
 
+        /* url-decode user & pass */
+        if (p->user != NULL)
+            octstr_url_decode(p->user);
+        if (p->pass != NULL)
+            octstr_url_decode(p->pass);
+
         if (auth_sep != -1)
             octstr_set_char(url, auth_sep, ':');
   
