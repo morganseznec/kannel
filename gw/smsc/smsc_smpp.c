@@ -2037,9 +2037,9 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                 smpp->conn->status = SMSCCONN_DISCONNECTED;
                 mutex_unlock(smpp->conn->flow_mutex);
                 if (!smpp->retry &&
-                    pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSID ||
+                    (pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSID ||
                     pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVPASWD ||
-                    pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSTYP) {
+                    pdu->u.bind_transmitter_resp.command_status == SMPP_ESME_RINVSYSTYP)) {
                     smpp->quitting = 1;
                 }
             } else {
@@ -2072,9 +2072,9 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                  smpp->conn->status = SMSCCONN_DISCONNECTED;
                  mutex_unlock(smpp->conn->flow_mutex);
                 if (!smpp->retry &&
-                     pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSID ||
+                     (pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSID ||
                      pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVPASWD ||
-                     pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSTYP) {
+                     pdu->u.bind_transceiver_resp.command_status == SMPP_ESME_RINVSYSTYP)) {
                      smpp->quitting = 1;
                  }
             } else {
@@ -2107,9 +2107,9 @@ static int handle_pdu(SMPP *smpp, Connection *conn, SMPP_PDU *pdu,
                  smpp->conn->status = SMSCCONN_DISCONNECTED;
                  mutex_unlock(smpp->conn->flow_mutex);
                 if (!smpp->retry &&
-                     pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSID ||
+                     (pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSID ||
                      pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVPASWD ||
-                     pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSTYP) {
+                     pdu->u.bind_receiver_resp.command_status == SMPP_ESME_RINVSYSTYP)) {
                      smpp->quitting = 1;
                  }
             } else {

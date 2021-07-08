@@ -1,4 +1,7 @@
 2021-07-08 Alexander Malysh <amalysh @ kannel.org>
+    * gw/smsc/smsc_smpp.c: fixed wrong if condition
+
+2021-07-08 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/gwthread-pthread.c: increased thread limit and change warning to error
       about our thread limits
 
