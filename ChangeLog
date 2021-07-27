@@ -1,3 +1,7 @@
+2021-07-27 Alexander Malysh <amalysh @ kannel.org>
+    * gwlib/conn.c: applied SSL cache data patch.
+      Thanks to Paul Bagyenda for this patch.
+
 2021-07-08 Alexander Malysh <amalysh @ kannel.org>
     * gw/smsc/smsc_smpp.c: fixed wrong if condition
 

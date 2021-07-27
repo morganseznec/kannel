@@ -310,7 +310,7 @@ static int unlocked_try_write(Connection *conn)
 static void unlocked_read(Connection *conn)
 {
     unsigned char buf[4096];
-    long len;
+    long len = 0;
 
     if (conn->inbufpos > 0) {
         octstr_delete(conn->inbuf, 0, conn->inbufpos);
@@ -319,7 +319,13 @@ static void unlocked_read(Connection *conn)
 
 #ifdef HAVE_LIBSSL
     if (conn->ssl != NULL) {
-        len = SSL_read(conn->ssl, buf, sizeof(buf));
+        /* We should empty out all data in the SSL read buffer.
+         * If we don't, then the next poll() on the file descriptor will *not* behave as expected. 
+         */
+        do {
+            octstr_append_data(conn->inbuf, buf, len); 
+            len = SSL_read(conn->ssl, buf, sizeof(buf));
+        } while (len > 0 && SSL_pending(conn->ssl) > 0);
     } else
 #endif /* HAVE_LIBSSL */
         len = read(conn->fd, buf, sizeof(buf));
