@@ -1,3 +1,6 @@
+2021-08-09 Alexander Malysh <amalysh @ kannel.org>
+    * gw/bb_smscconn.c: fixed memleak & double conn creation for add-smsc
+
 2021-07-27 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/conn.c: applied SSL cache data patch.
       Thanks to Paul Bagyenda for this patch.

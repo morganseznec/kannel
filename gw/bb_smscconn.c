@@ -1112,7 +1112,7 @@ int smsc2_remove_smsc(Octstr *id)
 int smsc2_add_smsc(Octstr *id)
 {
     CfgGroup *grp;
-    SMSCConn *conn;
+    SMSCConn *conn = NULL;
     Octstr *smscid = NULL;
     long i, m, j;
     int success = 0;
@@ -1141,7 +1141,6 @@ int smsc2_add_smsc(Octstr *id)
             smscid = cfg_get(grp, octstr_imm("smsc-id"));
 
         if (smscid != NULL && octstr_compare(smscid, id) == 0) {
-            conn = smscconn_create(grp, 1);
             /* multiple instances for the same group? */
             m = smscconn_instances(grp);
             for (j = 0; j < m; j++) {
@@ -1160,6 +1159,8 @@ int smsc2_add_smsc(Octstr *id)
                 }
             }
         }
+        octstr_destroy(smscid);
+        smscid = NULL;
     }
     gwlist_remove_producer(smsc_list);
     gw_rwlock_unlock(&smsc_list_lock);
