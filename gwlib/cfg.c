@@ -461,7 +461,7 @@ int cfg_read(Cfg *cfg)
     Octstr *filename; 
     CfgGroup *grp;
     long equals;
-    long error_lineno;
+    CfgLoc *err_loc = NULL;
     
     loc = loc_inc = NULL;
 
@@ -477,12 +477,12 @@ int cfg_read(Cfg *cfg)
     gwlist_insert(stack, 0, octstr_duplicate(cfg->filename)); 
 
     grp = NULL;
-    error_lineno = 0;
-    while (error_lineno == 0 && (loc = gwlist_extract_first(lines)) != NULL) { 
+    err_loc = NULL;
+    while (err_loc == NULL && (loc = gwlist_extract_first(lines)) != NULL) { 
         octstr_strip_blanks(loc->line); 
         if (octstr_len(loc->line) == 0) { 
             if (grp != NULL && add_group(cfg, grp) == -1) { 
-                error_lineno = loc->line_no; 
+                err_loc = loc; loc = NULL;
                 destroy_group(grp); 
             } 
             grp = NULL; 
@@ -491,7 +491,7 @@ int cfg_read(Cfg *cfg)
             if (equals == -1) { 
                 error(0, "An equals sign ('=') is missing on line %ld of file %s.", 
                       loc->line_no, octstr_get_cstr(loc->filename)); 
-                error_lineno = loc->line_no; 
+                err_loc = loc; loc = NULL;
             } else  
              
             /* 
@@ -617,16 +617,18 @@ int cfg_read(Cfg *cfg)
     }
 
     if (grp != NULL && add_group(cfg, grp) == -1) {
-        error_lineno = 1; 
+        err_loc = cfgloc_create(cfg->filename);
+        err_loc->line_no = 1;
         destroy_group(grp); 
     }
 
     gwlist_destroy(lines, NULL); 
     gwlist_destroy(stack, octstr_destroy_item); 
 
-    if (error_lineno != 0) {
+    if (err_loc != NULL) {
         error(0, "Error found on line %ld of file `%s'.",  
-	          error_lineno, octstr_get_cstr(cfg->filename)); 
+	          err_loc->line_no, octstr_get_cstr(err_loc->filename));
+        cfgloc_destroy(err_loc);
         return -1; 
     }
 
