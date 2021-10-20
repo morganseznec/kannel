@@ -1,3 +1,7 @@
+2021-10-20  Stipe Tolj  <stolj at kannel.org>
+    * gw/bb_http.c: ensure we provide an adequate 'Content-Type' header value
+      with a MIME type that is requested via the /status.<suffix>.
+      
 2021-08-14 Alexander Malysh <amalysh @ kannel.org>
     * gwlib/cfg.c: fixed config parsing error log
 
