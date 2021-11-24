@@ -47,6 +47,7 @@ noinst_PROGRAMS = \
 	test_sl \
 	test_smsc \
 	test_store_dump \
+	test_timerset \
 	test_udp \
 	test_urltrans \
 	test_uuid \

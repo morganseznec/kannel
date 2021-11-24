@@ -1,3 +1,11 @@
+2021-11-24  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/gw-timer.[ch]: add function variants for callback timed events, 
+      suffixed with _cb() that do not lock the Timerset, since the callback 
+      function runs within the locked watch loop and would cause a dead-lock
+      if using the functions that are used for queue pushed timer events.
+    * test/Makefile.am: add test_timeset.c build instruction.
+    * test/test_timerset.c: add a simple testing case.  
+    
 2021-10-20  Stipe Tolj  <stolj at kannel.org>
     * gw/bb_http.c: ensure we provide an adequate 'Content-Type' header value
       with a MIME type that is requested via the /status.<suffix>.
