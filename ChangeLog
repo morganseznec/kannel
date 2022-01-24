@@ -1,3 +1,8 @@
+2022-01-24  Stipe Tolj  <stolj at kannel.org>
+    * gw/wap_push_ota.c: ensure we have static definitions of variables, since
+      wap/wtp_resp.c defines it already public, and we run into linker error on
+      gcc-10 platforms.
+      
 2021-11-24  Stipe Tolj  <stolj at kannel.org>
     * gwlib/gw-timer.[ch]: add function variants for callback timed events, 
       suffixed with _cb() that do not lock the Timerset, since the callback 
