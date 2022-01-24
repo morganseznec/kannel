@@ -238,6 +238,7 @@ dnl Checks for library functions.
 
 AC_CHECK_FUNCS(gettimeofday select socket strdup getopt_long localtime_r gmtime_r backtrace srandom strtoll strtoq setpriority initgroups)
 AC_CHECK_FUNC(getopt, [], [AC_LIBOBJ([utils/attgetopt])])
+AC_CHECK_FUNC(dlopen, [], AC_CHECK_LIB(dl, dlopen, LDFLAGS="$LDFLAGS -ldl"))
 
 dnl Check if we have reentrant gethostbyname and which one
 AC_CHECK_FUNC(gethostbyname_r, [ AC_FUNC_WHICH_GETHOSTBYNAME_R ], [

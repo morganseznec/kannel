@@ -1,4 +1,8 @@
 2022-01-24  Stipe Tolj  <stolj at kannel.org>
+    * configure[.in]: ensure we add -ldl to LDFLAGS if not in glibc, this is at
+      least the case for debian-11.
+     
+2022-01-24  Stipe Tolj  <stolj at kannel.org>
     * gw/wap_push_ota.c: ensure we have static definitions of variables, since
       wap/wtp_resp.c defines it already public, and we run into linker error on
       gcc-10 platforms.
