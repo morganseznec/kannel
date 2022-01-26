@@ -1,3 +1,6 @@
+2022-01-26  Stipe Tolj  <stolj at kannel.org>
+    * gwlib/log.c: increase log-file limit at least to thread limit, 4096.
+    
 2022-01-24  Stipe Tolj  <stolj at kannel.org>
     * configure[.in]: ensure we add -ldl to LDFLAGS if not in glibc, this is at
       least the case for debian-11.
